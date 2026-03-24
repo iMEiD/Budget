@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test</title>
+<style>
+body{font-family:sans-serif;padding:20px;background:#111;color:#fff;direction:rtl;}
+.box{background:#1c2230;border-radius:12px;padding:16px;margin-bottom:12px;}
+.ok{color:#26de81;} .err{color:#fc5c65;} .wait{color:#f5a623;}
+</style>
+</head>
+<body>
+<h2>🔍 تشخيص Aimvest</h2>
+<div class="box" id="s1">⏳ اختبار تحميل الصفحة...</div>
+<div class="box" id="s2">⏳ اختبار الاتصال بالإنترنت...</div>
+<div class="box" id="s3">⏳ اختبار Firebase App...</div>
+<div class="box" id="s4">⏳ اختبار Firebase Auth...</div>
+<div class="box" id="s5">⏳ اختبار Firestore...</div>
+<div class="box" id="s6">⏳ اختبار Auth State...</div>
+<div class="box" id="result" style="font-size:18px;font-weight:bold"></div>
+
+<script>
+document.getElementById('s1').innerHTML='<span class="ok">✅ الصفحة تحملت بنجاح</span>';
+</script>
+
+<script>
+fetch('https://www.google.com',{mode:'no-cors'})
+  .then(()=>document.getElementById('s2').innerHTML='<span class="ok">✅ الاتصال بالإنترنت يعمل</span>')
+  .catch(e=>document.getElementById('s2').innerHTML='<span class="err">❌ مشكلة في الاتصال: '+e+'</span>');
+</script>
+
+<script type="module">
+const log=(id,ok,msg)=>{document.getElementById(id).innerHTML=`<span class="${ok?'ok':'err'}">${ok?'✅':'❌'} ${msg}</span>`;};
+
+try{
+  const{initializeApp}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+  log('s3',true,'Firebase App تحمّل بنجاح');
+
+  try{
+    const{getAuth,onAuthStateChanged}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
+    log('s4',true,'Firebase Auth تحمّل بنجاح');
+
+    try{
+      const{getFirestore}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+      log('s5',true,'Firestore تحمّل بنجاح');
+
+      const app=initializeApp({
+        apiKey:"AIzaSyAyibBrcigwaLNGBkSjb50dSusWKodYRpI",
+        authDomain:"budget-38a17.firebaseapp.com",
+        projectId:"budget-38a17",
+        storageBucket:"budget-38a17.firebasestorage.app",
+        messagingSenderId:"487681024383",
+        appId:"1:487681024383:web:d524d7b1485eb63ed7fa4a"
+      });
+
+      const auth=getAuth(app);
+      let resolved=false;
+
+      setTimeout(()=>{
+        if(!resolved){
+          resolved=true;
+          log('s6',false,'Auth State: لم يستجب بعد 5 ثواني — مشكلة في authDomain أو الدومين');
+          document.getElementById('result').innerHTML='<span class="err">🚨 المشكلة: Firebase Auth لا يستجب. السبب: authDomain أو Authorized Domains</span>';
+        }
+      },5000);
+
+      onAuthStateChanged(auth,user=>{
+        if(!resolved){
+          resolved=true;
+          log('s6',true,'Auth State يعمل! المستخدم: '+(user?user.email:'غير مسجل'));
+          document.getElementById('result').innerHTML='<span class="ok">🎉 كل شيء يعمل! المشكلة في مكان آخر في الكود الأصلي</span>';
+        }
+      });
+
+    }catch(e){log('s5',false,'Firestore فشل: '+e);}
+  }catch(e){log('s4',false,'Firebase Auth فشل: '+e);}
+}catch(e){log('s3',false,'Firebase App فشل: '+e);}
+</script>
+</body>
+</html>

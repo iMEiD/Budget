@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>ميزانيتي</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f0f4f8;
+  --white: #ffffff;
+  --card: #ffffff;
+  --navy: #0f1e3c;
+  --navy2: #1a2f54;
+  --teal: #00b4a6;
+  --teal2: #009688;
+  --gold: #f5a623;
+  --gold2: #e6951a;
+  --red: #e53935;
+  --red2: #ff6b6b;
+  --green: #2ecc71;
+  --green2: #27ae60;
+  --text: #1a1a2e;
+  --muted: #7a8499;
+  --border: #e2e8f0;
+  --shadow: 0 4px 20px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body {
+  font-family: 'Tajawal', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  max-width: 430px;
+  margin: 0 auto;
+  direction: rtl;
+  padding-bottom: 100px;
+}
+
+/* AUTH SCREEN */
+.auth-screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 24px;
+  background: linear-gradient(160deg, var(--navy) 0%, #1e3a5f 100%);
+}
+.auth-logo { font-size: 52px; margin-bottom: 8px; }
+.auth-title { font-size: 30px; font-weight: 900; color: #fff; margin-bottom: 4px; }
+.auth-title span { color: var(--teal); }
+.auth-sub { color: rgba(255,255,255,0.5); font-size: 14px; margin-bottom: 36px; }
+.auth-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 20px;
+  padding: 28px 24px;
+  width: 100%;
+}
+.auth-tabs { display: flex; gap: 0; margin-bottom: 24px; background: rgba(0,0,0,0.2); border-radius: 12px; padding: 4px; }
+.auth-tab {
+  flex: 1; padding: 10px; border: none; background: none;
+  color: rgba(255,255,255,0.5); font-family: 'Tajawal',sans-serif;
+  font-size: 14px; font-weight: 700; cursor: pointer; border-radius: 10px; transition: all 0.2s;
+}
+.auth-tab.active { background: var(--teal); color: #fff; }
+.auth-field { margin-bottom: 14px; }
+.auth-label { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.5); display: block; margin-bottom: 6px; }
+.auth-input {
+  width: 100%; padding: 13px 16px; border: 1.5px solid rgba(255,255,255,0.15);
+  border-radius: 12px; background: rgba(255,255,255,0.08); color: #fff;
+  font-family: 'Tajawal',sans-serif; font-size: 15px; direction: rtl;
+}
+.auth-input:focus { outline: none; border-color: var(--teal); }
+.auth-input::placeholder { color: rgba(255,255,255,0.3); }
+.auth-btn {
+  width: 100%; padding: 15px; border: none; border-radius: 14px;
+  background: linear-gradient(135deg, var(--teal), var(--teal2));
+  color: #fff; font-family: 'Tajawal',sans-serif; font-size: 16px;
+  font-weight: 800; cursor: pointer; margin-top: 8px;
+  box-shadow: 0 4px 20px rgba(0,180,166,0.4);
+  transition: all 0.2s;
+}
+.auth-btn:active { transform: scale(0.97); }
+.auth-error { color: var(--red2); font-size: 13px; text-align: center; margin-top: 12px; min-height: 20px; }
+
+/* TOPBAR */
+.topbar {
+  background: linear-gradient(135deg, var(--navy), var(--navy2));
+  padding: 20px 20px 28px; position: relative; overflow: hidden;
+}
+.topbar::before {
+  content:''; position:absolute; top:-40px; left:-40px;
+  width:160px; height:160px; border-radius:50%;
+  background:rgba(0,180,166,0.15);
+}
+.topbar-row { display:flex; justify-content:space-between; align-items:center; position:relative; z-index:1; }
+.app-name { font-size:22px; font-weight:900; color:#fff; }
+.app-name span { color:var(--teal); }
+.topbar-actions { display:flex; gap:8px; align-items:center; }
+.month-badge {
+  background:rgba(255,255,255,0.12); color:rgba(255,255,255,0.9);
+  padding:6px 14px; border-radius:20px; font-size:13px; font-weight:600;
+  cursor:pointer; border:1px solid rgba(255,255,255,0.2);
+}
+.signout-btn {
+  background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2);
+  color:rgba(255,255,255,0.7); border-radius:10px; padding:6px 12px;
+  font-family:'Tajawal',sans-serif; font-size:12px; font-weight:700; cursor:pointer;
+}
+.balance-section { margin-top:20px; position:relative; z-index:1; }
+.balance-label { color:rgba(255,255,255,0.6); font-size:12px; font-weight:500; margin-bottom:4px; }
+.balance-amount { color:#fff; font-size:34px; font-weight:900; line-height:1; }
+.balance-sub { color:rgba(255,255,255,0.5); font-size:12px; margin-top:4px; }
+.top-stats { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:18px; position:relative; z-index:1; }
+.top-stat { background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.12); border-radius:14px; padding:12px 14px; }
+.top-stat-label { color:rgba(255,255,255,0.55); font-size:11px; margin-bottom:4px; }
+.top-stat-val { color:#fff; font-size:18px; font-weight:800; }
+.top-stat-val.red { color:var(--red2); }
+.top-stat-val.green { color:#4ade80; }
+
+/* LIMIT CARD */
+.limit-card {
+  margin:-12px 16px 0; background:var(--white); border-radius:18px;
+  padding:16px 18px; box-shadow:var(--shadow-lg); position:relative; z-index:2;
+}
+.limit-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.limit-title { font-size:13px; font-weight:700; color:var(--muted); }
+.limit-bar-wrap { background:var(--border); border-radius:6px; height:10px; overflow:hidden; margin-bottom:8px; }
+.limit-bar-fill { height:100%; border-radius:6px; transition:width 0.6s ease, background 0.3s; }
+.limit-status { font-size:12px; font-weight:600; padding:4px 10px; border-radius:8px; display:inline-block; }
+.status-safe { background:rgba(46,204,113,0.12); color:var(--green2); }
+.status-warn { background:rgba(245,166,35,0.15); color:var(--gold2); }
+.status-danger { background:rgba(229,57,53,0.12); color:var(--red); }
+.budget-surplus { font-size:12px; color:var(--green2); font-weight:600; margin-top:4px; }
+
+/* SECTIONS */
+.section { padding:20px 16px 0; }
+.section-title { font-size:16px; font-weight:800; color:var(--navy); margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+.card { background:var(--card); border-radius:16px; padding:18px; margin-bottom:12px; box-shadow:var(--shadow); }
+
+/* FORM */
+.add-form { display:flex; flex-direction:column; gap:12px; }
+.form-row { display:flex; gap:10px; }
+input, select {
+  font-family:'Tajawal',sans-serif; font-size:15px; direction:rtl;
+  width:100%; padding:12px 14px; border:1.5px solid var(--border);
+  border-radius:12px; background:#f8fafc; color:var(--text); transition:border-color 0.2s;
+  -webkit-appearance:none;
+}
+input:focus, select:focus { outline:none; border-color:var(--teal); background:#fff; }
+input::placeholder { color:#b0bac9; }
+.cat-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+.cat-btn {
+  background:#f0f4f8; border:2px solid transparent; border-radius:12px;
+  padding:10px 6px; cursor:pointer; text-align:center; transition:all 0.2s;
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+}
+.cat-btn .cat-icon { font-size:22px; }
+.cat-btn .cat-name { font-size:10px; font-weight:700; color:var(--muted); font-family:'Tajawal',sans-serif; }
+.cat-btn.selected { border-color:var(--teal); background:rgba(0,180,166,0.08); }
+.cat-btn.selected .cat-name { color:var(--teal2); }
+.btn-submit {
+  background:linear-gradient(135deg,var(--teal),var(--teal2)); color:#fff;
+  border:none; border-radius:14px; padding:15px;
+  font-family:'Tajawal',sans-serif; font-size:16px; font-weight:800;
+  cursor:pointer; width:100%; transition:all 0.25s;
+  box-shadow:0 4px 16px rgba(0,180,166,0.3);
+}
+.btn-submit:active { transform:scale(0.97); }
+
+/* TRANSACTIONS */
+.tx-item { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--border); }
+.tx-item:last-child { border-bottom:none; padding-bottom:0; }
+.tx-item:first-child { padding-top:0; }
+.tx-icon { width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+.tx-info { flex:1; min-width:0; }
+.tx-desc { font-size:14px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.tx-meta { font-size:11px; color:var(--muted); margin-top:2px; }
+.tx-amount { font-size:15px; font-weight:800; color:var(--red); flex-shrink:0; }
+.tx-delete { background:none; border:none; color:#ddd; font-size:18px; cursor:pointer; padding:4px; flex-shrink:0; }
+.empty-state { text-align:center; padding:24px; color:var(--muted); font-size:14px; }
+
+/* COMMITMENTS */
+.commit-item { display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border); }
+.commit-item:last-child { border-bottom:none; }
+.commit-left { display:flex; align-items:center; gap:10px; }
+.commit-check {
+  width:22px; height:22px; border-radius:6px; border:2px solid var(--border);
+  background:none; cursor:pointer; display:flex; align-items:center;
+  justify-content:center; font-size:13px; transition:all 0.2s; flex-shrink:0;
+}
+.commit-check.paid { background:var(--green); border-color:var(--green); color:#fff; }
+.commit-name { font-size:14px; font-weight:600; }
+.commit-amount { font-size:14px; font-weight:800; color:var(--red); }
+.add-commit-row { display:flex; gap:8px; margin-top:12px; }
+.btn-small {
+  background:var(--teal); color:#fff; border:none; border-radius:10px;
+  padding:11px 16px; font-family:'Tajawal',sans-serif; font-size:14px;
+  font-weight:700; cursor:pointer; white-space:nowrap;
+}
+
+/* SAVINGS */
+.goal-card {
+  background:linear-gradient(135deg,var(--navy),#1e3a5f);
+  border-radius:18px; padding:20px; color:#fff; box-shadow:var(--shadow-lg);
+}
+.goal-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; }
+.goal-dest { font-size:22px; }
+.goal-name { font-size:16px; font-weight:800; margin-top:4px; }
+.goal-saved-num { font-size:24px; font-weight:900; color:var(--teal); }
+.goal-saved-label { font-size:11px; color:rgba(255,255,255,0.5); }
+.goal-bar-wrap { background:rgba(255,255,255,0.15); border-radius:6px; height:10px; overflow:hidden; margin-bottom:10px; }
+.goal-bar-fill { height:100%; background:linear-gradient(90deg,var(--teal),#4ade80); border-radius:6px; transition:width 0.8s ease; }
+.goal-stats { display:flex; justify-content:space-between; }
+.goal-stat { text-align:center; }
+.goal-stat-num { font-size:16px; font-weight:800; }
+.goal-stat-label { font-size:10px; color:rgba(255,255,255,0.5); margin-top:2px; }
+.btn-add-savings {
+  margin-top:14px; background:rgba(0,180,166,0.2); border:1.5px solid rgba(0,180,166,0.4);
+  color:var(--teal); border-radius:12px; padding:10px;
+  font-family:'Tajawal',sans-serif; font-size:14px; font-weight:700;
+  cursor:pointer; width:100%; transition:all 0.2s;
+}
+
+/* ANALYSIS */
+.analysis-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+.stat-box { background:#f8fafc; border-radius:14px; padding:14px; text-align:center; }
+.stat-box-num { font-size:20px; font-weight:900; }
+.stat-box-label { font-size:11px; color:var(--muted); margin-top:4px; font-weight:600; }
+.cat-breakdown { display:flex; flex-direction:column; gap:8px; }
+.cat-row { display:flex; align-items:center; gap:10px; }
+.cat-row-icon { font-size:18px; width:28px; text-align:center; }
+.cat-row-info { flex:1; }
+.cat-row-name { font-size:13px; font-weight:700; }
+.cat-row-bar-wrap { background:var(--border); border-radius:4px; height:6px; overflow:hidden; margin-top:4px; }
+.cat-row-bar { height:100%; border-radius:4px; }
+.cat-row-amount { font-size:13px; font-weight:800; color:var(--text); }
+.insight-box {
+  background:rgba(0,180,166,0.06); border:1px solid rgba(0,180,166,0.2);
+  border-radius:12px; padding:14px; font-size:13px; color:var(--teal2);
+  font-weight:600; margin-top:12px; line-height:1.6;
+}
+
+/* TOAST */
+.toast {
+  position:fixed; top:20px; left:50%; transform:translateX(-50%) translateY(-80px);
+  background:var(--navy); color:#fff; padding:14px 20px; border-radius:14px;
+  font-size:14px; font-weight:700; z-index:999;
+  transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow:var(--shadow-lg); max-width:340px; width:90%; text-align:center;
+  border-right:4px solid var(--teal);
+}
+.toast.show { transform:translateX(-50%) translateY(0); }
+.toast.warn { border-right-color:var(--gold); }
+.toast.danger { border-right-color:var(--red); }
+
+/* MODAL */
+.modal-overlay {
+  position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:100;
+  display:flex; align-items:flex-end; backdrop-filter:blur(4px);
+}
+.modal {
+  background:var(--white); border-radius:24px 24px 0 0; padding:24px 20px 40px;
+  width:100%; max-height:85vh; overflow-y:auto; animation:slideUp 0.3s ease;
+}
+.modal-title { font-size:19px; font-weight:800; margin-bottom:18px; display:flex; justify-content:space-between; align-items:center; }
+.modal-close { background:var(--border); border:none; border-radius:50%; width:30px; height:30px; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--muted); }
+.modal-field { margin-bottom:14px; }
+.modal-label { font-size:13px; font-weight:700; color:var(--muted); margin-bottom:6px; display:block; }
+.btn-modal-save {
+  background:linear-gradient(135deg,var(--navy),var(--navy2)); color:#fff;
+  border:none; border-radius:14px; padding:15px;
+  font-family:'Tajawal',sans-serif; font-size:16px; font-weight:800;
+  cursor:pointer; width:100%; margin-top:8px;
+}
+
+/* NAV */
+.bottom-nav {
+  position:fixed; bottom:0; left:50%; transform:translateX(-50%);
+  width:100%; max-width:430px; background:var(--white);
+  border-top:1px solid var(--border); display:grid;
+  grid-template-columns:repeat(4,1fr); padding:10px 0 16px;
+  z-index:50; box-shadow:0 -4px 20px rgba(0,0,0,0.08);
+}
+.nav-btn {
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+  cursor:pointer; background:none; border:none; padding:6px; transition:all 0.2s;
+}
+.nav-icon { font-size:22px; }
+.nav-label { font-size:10px; font-weight:700; color:var(--muted); font-family:'Tajawal',sans-serif; }
+.nav-btn.active .nav-label { color:var(--teal); }
+
+/* PAGES */
+.page { display:none; }
+.page.active { display:block; }
+.progress-wrap { background:var(--border); border-radius:4px; height:8px; overflow:hidden; }
+.progress-fill { height:100%; border-radius:4px; background:linear-gradient(90deg,var(--teal),var(--gold)); transition:width 1s ease; }
+
+@keyframes slideUp { from { transform:translateY(100%); } to { transform:translateY(0); } }
+@keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+.fade-in { animation:fadeIn 0.4s ease both; }
+
+/* LOADING */
+.loading-screen {
+  position:fixed; inset:0; background:linear-gradient(160deg,var(--navy),#1e3a5f);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  z-index:200;
+}
+.loading-logo { font-size:52px; margin-bottom:16px; }
+.loading-text { color:rgba(255,255,255,0.7); font-size:15px; }
+.dots span {
+  display:inline-block; width:8px; height:8px; border-radius:50%;
+  background:var(--teal); animation:bounce 1.2s infinite; margin:0 3px;
+}
+.dots span:nth-child(2) { animation-delay:0.2s; }
+.dots span:nth-child(3) { animation-delay:0.4s; }
+@keyframes bounce { 0%,80%,100%{transform:scale(0)} 40%{transform:scale(1)} }
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div class="loading-screen" id="loadingScreen">
+  <div class="loading-logo">💰</div>
+  <div class="loading-text">
+    <div class="dots"><span></span><span></span><span></span></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- AUTH SCREEN -->
+<div id="authScreen" style="display:none">
+  <div class="auth-screen">
+    <div class="auth-logo">💰</div>
+    <div class="auth-title">ميزان<span>يتي</span></div>
+    <div class="auth-sub">تتبع مصاريفك • حقق أهدافك</div>
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchAuth('login')">تسجيل الدخول</button>
+        <button class="auth-tab" onclick="switchAuth('register')">حساب جديد</button>
+      </div>
+      <div id="loginForm">
+        <div class="auth-field">
+          <label class="auth-label">البريد الإلكتروني</label>
+          <input class="auth-input" type="email" id="login_email" placeholder="example@email.com" dir="ltr">
+        </div>
+        <div class="auth-field">
+          <label class="auth-label">كلمة المرور</label>
+          <input class="auth-input" type="password" id="login_pass" placeholder="••••••••" dir="ltr">
+        </div>
+        <button class="auth-btn" onclick="login()">دخول ←</button>
+      </div>
+      <div id="registerForm" style="display:none">
+        <div class="auth-field">
+          <label class="auth-label">الاسم</label>
+          <input class="auth-input" type="text" id="reg_name" placeholder="محمد">
+        </div>
+        <div class="auth-field">
+          <label class="auth-label">البريد الإلكتروني</label>
+          <input class="auth-input" type="email" id="reg_email" placeholder="example@email.com" dir="ltr">
+        </div>
+        <div class="auth-field">
+          <label class="auth-label">كلمة المرور</label>
+          <input class="auth-input" type="password" id="reg_pass" placeholder="6 أحرف على الأقل" dir="ltr">
+        </div>
+        <button class="auth-btn" onclick="register()">إنشاء الحساب ←</button>
+      </div>
+      <div class="auth-error" id="authError"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="mainApp" style="display:none">
+
+  <!-- SETUP MODAL -->
+  <div class="modal-overlay" id="setupModal" style="display:none">
+    <div class="modal">
+      <div class="modal-title">
+        <span>⚙️ الإعدادات</span>
+        <button class="modal-close" onclick="closeSetup()">✕</button>
+      </div>
+      <div class="modal-field"><label class="modal-label">💰 الراتب الشهري (ريال)</label><input type="number" id="cfg_salary" placeholder="مثال: 8840"></div>
+      <div class="modal-field"><label class="modal-label">📅 يوم نزول الراتب</label><input type="number" id="cfg_payday" placeholder="27" min="1" max="31"></div>
+      <div class="modal-field"><label class="modal-label">🎯 الحد اليومي للمصاريف (ريال)</label><input type="number" id="cfg_daily" placeholder="مثال: 100"></div>
+      <div class="modal-field"><label class="modal-label">✈️ هدف التوفير - الوجهة</label><input type="text" id="cfg_dest" placeholder="مثال: بالي إندونيسيا"></div>
+      <div class="modal-field"><label class="modal-label">💵 المبلغ المستهدف للرحلة (ريال)</label><input type="number" id="cfg_goal" placeholder="مثال: 15000"></div>
+      <div class="modal-field"><label class="modal-label">🏦 المبلغ الموفر الحالي (ريال)</label><input type="number" id="cfg_saved" placeholder="0"></div>
+      <button class="btn-modal-save" onclick="saveSetup()">💾 حفظ</button>
+    </div>
+  </div>
+
+  <!-- SAVINGS MODAL -->
+  <div class="modal-overlay" id="savingsModal" style="display:none">
+    <div class="modal">
+      <div class="modal-title"><span>🏦 إضافة توفير</span><button class="modal-close" onclick="document.getElementById('savingsModal').style.display='none'">✕</button></div>
+      <div class="modal-field"><label class="modal-label">المبلغ (ريال)</label><input type="number" id="savings_add" placeholder="مثال: 1500"></div>
+      <button class="btn-modal-save" onclick="addSavings()">✅ أضف للمدخرات</button>
+    </div>
+  </div>
+
+  <!-- PAGE: HOME -->
+  <div class="page active" id="page-home">
+    <div class="topbar">
+      <div class="topbar-row">
+        <div class="app-name">ميزان<span>يتي</span></div>
+        <div class="topbar-actions">
+          <div class="month-badge" id="monthLabel" onclick="openSetup()">⚙️</div>
+          <button class="signout-btn" onclick="signOut()">خروج</button>
+        </div>
+      </div>
+      <div class="balance-section">
+        <div class="balance-label">المتبقي هذا الشهر</div>
+        <div class="balance-amount" id="remaining">— ريال</div>
+        <div class="balance-sub" id="remainingSub">جاري التحميل...</div>
+      </div>
+      <div class="top-stats">
+        <div class="top-stat"><div class="top-stat-label">صُرف هذا الشهر</div><div class="top-stat-val red" id="totalSpent">0 ريال</div></div>
+        <div class="top-stat"><div class="top-stat-label">مدخرات الرحلة</div><div class="top-stat-val green" id="savedAmount">0 ريال</div></div>
+      </div>
+    </div>
+    <div class="limit-card">
+      <div class="limit-row">
+        <div class="limit-title">📊 الحد اليومي الذكي</div>
+        <div style="font-size:13px;font-weight:700"><span id="dailyUsed">0</span> / <span id="dailyLimit">—</span> ريال</div>
+      </div>
+      <div class="limit-bar-wrap"><div class="limit-bar-fill" id="limitBar" style="width:0%;background:var(--green)"></div></div>
+      <div id="limitStatus" class="limit-status status-safe">✅ أنت بأمان</div>
+      <div id="surplusMsg" class="budget-surplus" style="display:none"></div>
+    </div>
+    <div class="section">
+      <div class="section-title">➕ أضف مصروف</div>
+      <div class="card">
+        <div class="add-form">
+          <div class="form-row">
+            <input type="number" id="exp_amount" placeholder="المبلغ (ريال)" style="flex:1">
+            <input type="text" id="exp_desc" placeholder="وصف المصروف" style="flex:2">
+          </div>
+          <div class="cat-grid" id="catGrid"></div>
+          <button class="btn-submit" onclick="addExpense()">تسجيل المصروف</button>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">🕐 مصاريف اليوم</div>
+      <div class="card"><div id="todayList"><div class="empty-state">لا توجد مصاريف اليوم بعد</div></div></div>
+    </div>
+  </div>
+
+  <!-- PAGE: COMMITMENTS -->
+  <div class="page" id="page-commit">
+    <div class="topbar" style="padding-bottom:20px">
+      <div class="topbar-row"><div class="app-name">ميزان<span>يتي</span></div><div class="month-badge">الالتزامات</div></div>
+    </div>
+    <div class="section" style="padding-top:20px">
+      <div class="section-title">📋 الالتزامات الشهرية</div>
+      <div class="card">
+        <div id="commitList"><div class="empty-state">لا توجد التزامات</div></div>
+        <div class="add-commit-row">
+          <input type="text" id="commit_name" placeholder="اسم الالتزام" style="flex:2">
+          <input type="number" id="commit_amount" placeholder="المبلغ" style="flex:1">
+          <button class="btn-small" onclick="addCommitment()">+</button>
+        </div>
+      </div>
+      <div class="card" id="commitSummary"></div>
+    </div>
+  </div>
+
+  <!-- PAGE: SAVINGS -->
+  <div class="page" id="page-savings">
+    <div class="topbar" style="padding-bottom:20px">
+      <div class="topbar-row"><div class="app-name">ميزان<span>يتي</span></div><div class="month-badge">هدف الرحلة</div></div>
+    </div>
+    <div class="section" style="padding-top:20px">
+      <div class="section-title">✈️ مدخرات الرحلة</div>
+      <div id="goalCard"></div>
+    </div>
+  </div>
+
+  <!-- PAGE: ANALYSIS -->
+  <div class="page" id="page-analysis">
+    <div class="topbar" style="padding-bottom:20px">
+      <div class="topbar-row"><div class="app-name">ميزان<span>يتي</span></div><div class="month-badge">التحليل</div></div>
+    </div>
+    <div class="section" style="padding-top:20px">
+      <div class="section-title">📈 تحليل هذا الشهر</div>
+      <div id="analysisContent"></div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <button class="nav-btn active" onclick="switchPage('home',this)"><span class="nav-icon">🏠</span><span class="nav-label">الرئيسية</span></button>
+    <button class="nav-btn" onclick="switchPage('commit',this)"><span class="nav-icon">📋</span><span class="nav-label">الالتزامات</span></button>
+    <button class="nav-btn" onclick="switchPage('savings',this)"><span class="nav-icon">✈️</span><span class="nav-label">الرحلة</span></button>
+    <button class="nav-btn" onclick="switchPage('analysis',this)"><span class="nav-icon">📊</span><span class="nav-label">التحليل</span></button>
+  </div>
+</div>
+
+<!-- FIREBASE -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut as fbSignOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAyibBrcigwaLNGBkSjb50dSusWKodYRpI",
+  authDomain: "budget-38a17.firebaseapp.com",
+  projectId: "budget-38a17",
+  storageBucket: "budget-38a17.firebasestorage.app",
+  messagingSenderId: "487681024383",
+  appId: "1:487681024383:web:d524d7b1485eb63ed7fa4a"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// ======= GLOBALS =======
+const CATS = [
+  {id:'food',icon:'🍔',name:'أكل',color:'#ff7043'},
+  {id:'transport',icon:'🚗',name:'تنقل',color:'#2196f3'},
+  {id:'shopping',icon:'🛍',name:'تسوق',color:'#9c27b0'},
+  {id:'health',icon:'💊',name:'صحة',color:'#e53935'},
+  {id:'cafe',icon:'☕',name:'كافيه',color:'#795548'},
+  {id:'fun',icon:'🎮',name:'ترفيه',color:'#ff9800'},
+  {id:'bills',icon:'⚡',name:'فواتير',color:'#607d8b'},
+  {id:'other',icon:'💸',name:'أخرى',color:'#78909c'},
+];
+
+let currentUser = null;
+let config = {salary:0,payday:27,daily:100,dest:'رحلتي القادمة',goal:15000,saved:0};
+let expenses = [];
+let commitments = [];
+let selectedCat = 'food';
+
+const today = () => new Date().toISOString().slice(0,10);
+const monthKey = () => new Date().toISOString().slice(0,7);
+const fmt = n => Math.round(n).toLocaleString('ar-SA');
+
+// ======= AUTH STATE =======
+onAuthStateChanged(auth, async user => {
+  document.getElementById('loadingScreen').style.display = 'none';
+  if (user) {
+    currentUser = user;
+    document.getElementById('authScreen').style.display = 'none';
+    document.getElementById('mainApp').style.display = 'block';
+    await loadUserData();
+    initCatGrid();
+    updateHome();
+    if (!config.salary) setTimeout(() => openSetup(), 500);
+  } else {
+    currentUser = null;
+    document.getElementById('authScreen').style.display = 'block';
+    document.getElementById('mainApp').style.display = 'none';
+  }
+});
+
+// ======= AUTH FUNCTIONS =======
+window.switchAuth = (mode) => {
+  document.getElementById('loginForm').style.display = mode==='login' ? 'block' : 'none';
+  document.getElementById('registerForm').style.display = mode==='register' ? 'block' : 'none';
+  document.querySelectorAll('.auth-tab').forEach((t,i) => t.classList.toggle('active', (mode==='login'&&i===0)||(mode==='register'&&i===1)));
+  document.getElementById('authError').textContent = '';
+};
+
+window.login = async () => {
+  const email = document.getElementById('login_email').value.trim();
+  const pass = document.getElementById('login_pass').value;
+  if (!email||!pass) { document.getElementById('authError').textContent='أدخل البريد وكلمة المرور'; return; }
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+  } catch(e) {
+    document.getElementById('authError').textContent = 'بيانات غير صحيحة، حاول مجدداً';
+  }
+};
+
+window.register = async () => {
+  const name = document.getElementById('reg_name').value.trim();
+  const email = document.getElementById('reg_email').value.trim();
+  const pass = document.getElementById('reg_pass').value;
+  if (!name||!email||!pass) { document.getElementById('authError').textContent='أكمل جميع الحقول'; return; }
+  if (pass.length < 6) { document.getElementById('authError').textContent='كلمة المرور 6 أحرف على الأقل'; return; }
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, pass);
+    await setDoc(doc(db,'users',cred.user.uid), {name, email, createdAt: new Date().toISOString()});
+  } catch(e) {
+    document.getElementById('authError').textContent = e.code==='auth/email-already-in-use' ? 'البريد مستخدم بالفعل' : 'حدث خطأ، حاول مجدداً';
+  }
+};
+
+window.signOut = async () => {
+  await fbSignOut(auth);
+  showToast('تم تسجيل الخروج');
+};
+
+// ======= DATA FUNCTIONS =======
+async function loadUserData() {
+  if (!currentUser) return;
+  const uid = currentUser.uid;
+
+  // Config
+  const cfgDoc = await getDoc(doc(db,'users',uid,'config','main'));
+  if (cfgDoc.exists()) config = {...config, ...cfgDoc.data()};
+
+  // Expenses
+  const expSnap = await getDocs(collection(db,'users',uid,'expenses'));
+  expenses = expSnap.docs.map(d => ({id:d.id,...d.data()}));
+
+  // Commitments
+  const comSnap = await getDocs(collection(db,'users',uid,'commitments'));
+  commitments = comSnap.docs.map(d => ({id:d.id,...d.data()}));
+}
+
+async function saveConfig() {
+  if (!currentUser) return;
+  await setDoc(doc(db,'users',currentUser.uid,'config','main'), config);
+}
+
+async function saveExpense(exp) {
+  if (!currentUser) return;
+  const ref = await addDoc(collection(db,'users',currentUser.uid,'expenses'), exp);
+  return ref.id;
+}
+
+async function removeExpense(id) {
+  if (!currentUser) return;
+  await deleteDoc(doc(db,'users',currentUser.uid,'expenses',id));
+}
+
+async function saveCommitment(c) {
+  if (!currentUser) return;
+  const ref = await addDoc(collection(db,'users',currentUser.uid,'commitments'), c);
+  return ref.id;
+}
+
+async function updateCommitment(id, data) {
+  if (!currentUser) return;
+  await setDoc(doc(db,'users',currentUser.uid,'commitments',id), data, {merge:true});
+}
+
+async function removeCommitment(id) {
+  if (!currentUser) return;
+  await deleteDoc(doc(db,'users',currentUser.uid,'commitments',id));
+}
+
+// ======= UI FUNCTIONS =======
+function initCatGrid() {
+  const g = document.getElementById('catGrid');
+  g.innerHTML = CATS.map(c => `
+    <div class="cat-btn ${c.id===selectedCat?'selected':''}" onclick="selectCat('${c.id}')">
+      <span class="cat-icon">${c.icon}</span>
+      <span class="cat-name">${c.name}</span>
+    </div>`).join('');
+}
+
+window.selectCat = id => { selectedCat=id; initCatGrid(); };
+
+function getMonthExpenses() { return expenses.filter(e => e.date&&e.date.startsWith(monthKey())); }
+function getTodayExpenses() { return expenses.filter(e => e.date===today()); }
+function getTodayTotal() { return getTodayExpenses().reduce((s,e)=>s+e.amount,0); }
+function getMonthTotal() { return getMonthExpenses().reduce((s,e)=>s+e.amount,0); }
+function getDaysPassedInMonth() { return new Date().getDate(); }
+function getBudgetSurplus() {
+  const days = getDaysPassedInMonth();
+  return (days * (config.daily||100)) - getMonthTotal();
+}
+
+function updateHome() {
+  const monthTotal = getMonthTotal();
+  const commitTotal = commitments.filter(c=>c.paid).reduce((s,c)=>s+c.amount,0);
+  const sal = config.salary||0;
+  const remaining = sal - monthTotal - commitTotal;
+  document.getElementById('remaining').textContent = fmt(remaining)+' ريال';
+  document.getElementById('remainingSub').textContent = `الراتب ${fmt(sal)} | صُرف ${fmt(monthTotal+commitTotal)}`;
+  document.getElementById('totalSpent').textContent = fmt(monthTotal)+' ريال';
+  document.getElementById('savedAmount').textContent = fmt(config.saved||0)+' ريال';
+  document.getElementById('monthLabel').textContent = new Date().toLocaleDateString('ar-SA',{month:'long',year:'numeric'});
+  updateLimitCard();
+  renderTodayList();
+}
+
+function updateLimitCard() {
+  const dailyLimit = config.daily||100;
+  const todayTotal = getTodayTotal();
+  const surplus = getBudgetSurplus();
+  const prevSurplus = surplus + todayTotal;
+  const smartLimit = dailyLimit + Math.max(0, prevSurplus);
+  const pct = Math.min(100,(todayTotal/smartLimit)*100);
+
+  document.getElementById('dailyUsed').textContent = fmt(todayTotal);
+  document.getElementById('dailyLimit').textContent = fmt(dailyLimit);
+  document.getElementById('limitBar').style.width = pct+'%';
+
+  const statusEl = document.getElementById('limitStatus');
+  const surplusEl = document.getElementById('surplusMsg');
+
+  if (todayTotal <= dailyLimit) {
+    statusEl.className='limit-status status-safe'; statusEl.textContent='✅ أنت بأمان';
+    document.getElementById('limitBar').style.background='var(--green)';
+  } else if (todayTotal <= smartLimit && prevSurplus > 0) {
+    statusEl.className='limit-status status-warn'; statusEl.textContent='⚡ تجاوزت الحد لكن رصيدك المتراكم يغطيك';
+    document.getElementById('limitBar').style.background='var(--gold)';
+  } else {
+    statusEl.className='limit-status status-danger'; statusEl.textContent='🚨 تجاوزت الحد! سيؤثر على هدف الادخار';
+    document.getElementById('limitBar').style.background='var(--red)';
+  }
+
+  if (prevSurplus > dailyLimit * 0.3) {
+    surplusEl.style.display='block';
+    surplusEl.textContent=`💰 رصيد متراكم: ${fmt(prevSurplus)} ريال`;
+  } else { surplusEl.style.display='none'; }
+}
+
+function renderTodayList() {
+  const txs = getTodayExpenses().reverse();
+  const el = document.getElementById('todayList');
+  if (!txs.length) { el.innerHTML='<div class="empty-state">لا توجد مصاريف اليوم بعد</div>'; return; }
+  el.innerHTML = txs.map(t => {
+    const cat = CATS.find(c=>c.id===t.cat)||CATS[7];
+    return `<div class="tx-item fade-in">
+      <div class="tx-icon" style="background:${cat.color}22">${cat.icon}</div>
+      <div class="tx-info"><div class="tx-desc">${t.desc||cat.name}</div><div class="tx-meta">${cat.name} • ${t.time||''}</div></div>
+      <div class="tx-amount">-${fmt(t.amount)}</div>
+      <button class="tx-delete" onclick="deleteExpense('${t.id}')">🗑</button>
+    </div>`;
+  }).join('');
+}
+
+// ======= ACTIONS =======
+window.addExpense = async () => {
+  const amount = parseFloat(document.getElementById('exp_amount').value);
+  const desc = document.getElementById('exp_desc').value.trim();
+  if (!amount||amount<=0) { showToast('أدخل مبلغ المصروف','warn'); return; }
+
+  const exp = {
+    amount, desc, cat:selectedCat, date:today(),
+    time: new Date().toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit'})
+  };
+
+  const id = await saveExpense(exp);
+  expenses.push({id,...exp});
+
+  document.getElementById('exp_amount').value='';
+  document.getElementById('exp_desc').value='';
+
+  const todayTotal = getTodayTotal();
+  const dailyLimit = config.daily||100;
+  const surplus = getBudgetSurplus()+amount;
+  const smartLimit = dailyLimit + Math.max(0,surplus);
+
+  if (todayTotal > smartLimit) showToast(`🚨 تجاوزت ميزانيتك! صرفت ${fmt(todayTotal)} ريال اليوم`,'danger');
+  else if (todayTotal > dailyLimit && surplus > 0) showToast(`⚡ تجاوزت الحد اليومي لكن رصيدك المتراكم يحميك`,'warn');
+  else showToast(`✅ تم تسجيل ${fmt(amount)} ريال`);
+
+  updateHome();
+};
+
+window.deleteExpense = async id => {
+  await removeExpense(id);
+  expenses = expenses.filter(e=>e.id!==id);
+  updateHome();
+};
+
+window.addCommitment = async () => {
+  const name = document.getElementById('commit_name').value.trim();
+  const amount = parseFloat(document.getElementById('commit_amount').value);
+  if (!name||!amount) { showToast('أدخل اسم الالتزام والمبلغ','warn'); return; }
+  const c = {name,amount,paid:false};
+  const id = await saveCommitment(c);
+  commitments.push({id,...c});
+  document.getElementById('commit_name').value='';
+  document.getElementById('commit_amount').value='';
+  renderCommitments();
+};
+
+window.toggleCommit = async id => {
+  const c = commitments.find(c=>c.id===id);
+  if (c) {
+    c.paid=!c.paid;
+    await updateCommitment(id,{paid:c.paid});
+    renderCommitments(); updateHome();
+  }
+};
+
+window.deleteCommit = async id => {
+  await removeCommitment(id);
+  commitments=commitments.filter(c=>c.id!==id);
+  renderCommitments();
+};
+
+function renderCommitments() {
+  const el = document.getElementById('commitList');
+  if (!commitments.length) { el.innerHTML='<div class="empty-state">لا توجد التزامات</div>'; return; }
+  el.innerHTML = commitments.map(c => `
+    <div class="commit-item">
+      <div class="commit-left">
+        <div class="commit-check ${c.paid?'paid':''}" onclick="toggleCommit('${c.id}')">${c.paid?'✓':''}</div>
+        <div class="commit-name" style="${c.paid?'text-decoration:line-through;color:var(--muted)':''}">${c.name}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="commit-amount" style="${c.paid?'color:var(--muted)':''}">${fmt(c.amount)} ريال</div>
+        <button style="background:none;border:none;color:#ddd;font-size:16px;cursor:pointer" onclick="deleteCommit('${c.id}')">✕</button>
+      </div>
+    </div>`).join('');
+
+  const total=commitments.reduce((s,c)=>s+c.amount,0);
+  const paid=commitments.filter(c=>c.paid).reduce((s,c)=>s+c.amount,0);
+  document.getElementById('commitSummary').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;text-align:center">
+      <div><div style="font-size:11px;color:var(--muted);margin-bottom:4px">الإجمالي</div><div style="font-size:17px;font-weight:800">${fmt(total)}</div></div>
+      <div><div style="font-size:11px;color:var(--muted);margin-bottom:4px">مدفوع</div><div style="font-size:17px;font-weight:800;color:var(--green)">${fmt(paid)}</div></div>
+      <div><div style="font-size:11px;color:var(--muted);margin-bottom:4px">متبقي</div><div style="font-size:17px;font-weight:800;color:var(--red)">${fmt(total-paid)}</div></div>
+    </div>`;
+}
+
+window.addSavings = async () => {
+  const amount = parseFloat(document.getElementById('savings_add').value);
+  if (!amount||amount<=0) { showToast('أدخل مبلغاً صحيحاً','warn'); return; }
+  config.saved=(config.saved||0)+amount;
+  await saveConfig();
+  document.getElementById('savingsModal').style.display='none';
+  document.getElementById('savings_add').value='';
+  renderGoal(); updateHome();
+  showToast(`🎉 أضفت ${fmt(amount)} ريال للمدخرات!`);
+};
+
+function renderGoal() {
+  const el=document.getElementById('goalCard');
+  const saved=config.saved||0, goal=config.goal||15000, dest=config.dest||'رحلتي القادمة';
+  const pct=Math.min(100,Math.round((saved/goal)*100));
+  const remaining=Math.max(0,goal-saved);
+  const monthly=config.salary?Math.round(config.salary*0.17):1500;
+  const monthsLeft=remaining>0?Math.ceil(remaining/monthly):0;
+
+  el.innerHTML=`
+    <div class="goal-card">
+      <div class="goal-header">
+        <div><div class="goal-dest">✈️</div><div class="goal-name">${dest}</div></div>
+        <div class="goal-saved"><div class="goal-saved-num">${fmt(saved)}</div><div class="goal-saved-label">ريال موفّر</div></div>
+      </div>
+      <div class="goal-bar-wrap"><div class="goal-bar-fill" style="width:${pct}%"></div></div>
+      <div class="goal-stats">
+        <div class="goal-stat"><div class="goal-stat-num">${pct}%</div><div class="goal-stat-label">من الهدف</div></div>
+        <div class="goal-stat"><div class="goal-stat-num">${fmt(goal)}</div><div class="goal-stat-label">الهدف الكلي</div></div>
+        <div class="goal-stat"><div class="goal-stat-num">${monthsLeft>0?monthsLeft+' شهر':'🎉'}</div><div class="goal-stat-label">${monthsLeft>0?'للوصول':'وصلت!'}</div></div>
+      </div>
+      <button class="btn-add-savings" onclick="document.getElementById('savingsModal').style.display='flex'">+ أضف توفير هذا الشهر</button>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <div class="section-title" style="margin-bottom:12px">📅 خطة التوفير</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:10px">بناءً على توفير ~${fmt(monthly)} ريال/شهر</div>
+      ${Array.from({length:Math.min(monthsLeft,12)},(_,i)=>{
+        const acc=Math.min(goal,saved+monthly*(i+1));
+        const p=Math.min(100,Math.round((acc/goal)*100));
+        const d=new Date(); d.setMonth(d.getMonth()+i+1);
+        return `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+          <div style="background:rgba(0,180,166,0.1);color:var(--teal2);font-weight:700;font-size:12px;padding:4px 10px;border-radius:8px;min-width:55px;text-align:center">شهر ${i+1}</div>
+          <div style="flex:1">
+            <div style="font-size:12px;color:var(--muted);margin-bottom:4px">${d.toLocaleDateString('ar-SA',{month:'long'})}</div>
+            <div style="background:var(--border);border-radius:4px;height:6px;overflow:hidden"><div style="height:100%;width:${p}%;background:linear-gradient(90deg,var(--teal),#4ade80);border-radius:4px"></div></div>
+          </div>
+          <div style="font-size:14px;font-weight:800;color:var(--green2)">${fmt(acc)}</div>
+        </div>`;
+      }).join('')}
+    </div>`;
+}
+
+function renderAnalysis() {
+  const monthExps=getMonthExpenses();
+  const total=monthExps.reduce((s,e)=>s+e.amount,0);
+  const days=getDaysPassedInMonth();
+  const avgDay=days>0?total/days:0;
+  const sal=config.salary||0;
+  const commitTotal=commitments.reduce((s,c)=>s+c.amount,0);
+  const netSavable=sal-total-commitTotal;
+
+  const byCat={};
+  CATS.forEach(c=>byCat[c.id]=0);
+  monthExps.forEach(e=>{if(byCat[e.cat]!==undefined)byCat[e.cat]+=e.amount;});
+  const maxCat=Math.max(...Object.values(byCat),1);
+
+  const catRows=CATS.filter(c=>byCat[c.id]>0).sort((a,b)=>byCat[b.id]-byCat[a.id]).map(c=>{
+    const pct=Math.round((byCat[c.id]/maxCat)*100);
+    return `<div class="cat-row">
+      <div class="cat-row-icon">${c.icon}</div>
+      <div class="cat-row-info">
+        <div class="cat-row-name">${c.name}</div>
+        <div class="cat-row-bar-wrap"><div class="cat-row-bar" style="width:${pct}%;background:${c.color}"></div></div>
+      </div>
+      <div class="cat-row-amount">${fmt(byCat[c.id])}</div>
+    </div>`;
+  }).join('');
+
+  const surplusVsLimit=getBudgetSurplus();
+  const topCat=CATS.find(c=>c.id===Object.entries(byCat).sort((a,b)=>b[1]-a[1])[0]?.[0]);
+  let insight=total===0?'لم تسجل أي مصاريف بعد هذا الشهر.':
+    surplusVsLimit>0?`👍 رائع! وفّرت ${fmt(surplusVsLimit)} ريال مقارنة بحدك اليومي. ${topCat?`أكثر مصاريفك في "${topCat.name}".`:''}`:
+    `⚠️ تجاوزت ميزانيتك اليومية بـ ${fmt(Math.abs(surplusVsLimit))} ريال. ${topCat?`راجع مصاريف "${topCat.name}".`:''}`;
+
+  document.getElementById('analysisContent').innerHTML=`
+    <div class="analysis-grid">
+      <div class="stat-box"><div class="stat-box-num" style="color:var(--red)">${fmt(total)}</div><div class="stat-box-label">إجمالي الصرف</div></div>
+      <div class="stat-box"><div class="stat-box-num" style="color:var(--gold)">${fmt(avgDay)}</div><div class="stat-box-label">متوسط اليوم</div></div>
+      <div class="stat-box"><div class="stat-box-num" style="color:var(--green)">${fmt(netSavable)}</div><div class="stat-box-label">صافي للادخار</div></div>
+      <div class="stat-box"><div class="stat-box-num">${monthExps.length}</div><div class="stat-box-label">عدد المعاملات</div></div>
+    </div>
+    <div class="card"><div class="section-title" style="margin-bottom:14px">📂 حسب التصنيف</div>${catRows||'<div class="empty-state">لا بيانات</div>'}</div>
+    <div class="insight-box">${insight}</div>
+    <div class="card" style="margin-top:12px">
+      <div class="section-title" style="margin-bottom:12px">📅 آخر المعاملات</div>
+      ${getMonthExpenses().slice(-10).reverse().map(t=>{
+        const cat=CATS.find(c=>c.id===t.cat)||CATS[7];
+        return `<div class="tx-item">
+          <div class="tx-icon" style="background:${cat.color}22">${cat.icon}</div>
+          <div class="tx-info"><div class="tx-desc">${t.desc||cat.name}</div><div class="tx-meta">${t.date} • ${t.time||''}</div></div>
+          <div class="tx-amount">-${fmt(t.amount)}</div>
+        </div>`;
+      }).join('')||'<div class="empty-state">لا مصاريف</div>'}
+    </div>`;
+}
+
+// ======= SETUP =======
+window.openSetup = () => {
+  document.getElementById('cfg_salary').value=config.salary||'';
+  document.getElementById('cfg_payday').value=config.payday||27;
+  document.getElementById('cfg_daily').value=config.daily||100;
+  document.getElementById('cfg_dest').value=config.dest||'';
+  document.getElementById('cfg_goal').value=config.goal||'';
+  document.getElementById('cfg_saved').value=config.saved||0;
+  document.getElementById('setupModal').style.display='flex';
+};
+window.closeSetup = () => document.getElementById('setupModal').style.display='none';
+window.saveSetup = async () => {
+  config.salary=parseFloat(document.getElementById('cfg_salary').value)||0;
+  config.payday=parseInt(document.getElementById('cfg_payday').value)||27;
+  config.daily=parseFloat(document.getElementById('cfg_daily').value)||100;
+  config.dest=document.getElementById('cfg_dest').value||'رحلتي القادمة';
+  config.goal=parseFloat(document.getElementById('cfg_goal').value)||15000;
+  config.saved=parseFloat(document.getElementById('cfg_saved').value)||0;
+  await saveConfig();
+  closeSetup(); updateHome();
+  showToast('✅ تم حفظ الإعدادات');
+};
+
+// ======= NAVIGATION =======
+window.switchPage = (page, btn) => {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  btn.classList.add('active');
+  if (page==='commit') renderCommitments();
+  if (page==='savings') renderGoal();
+  if (page==='analysis') renderAnalysis();
+  window.scrollTo({top:0,behavior:'smooth'});
+};
+
+// ======= TOAST =======
+window.showToast = (msg, type='info') => {
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='toast show'+(type!=='info'?' '+type:'');
+  clearTimeout(t._timer);
+  t._timer=setTimeout(()=>t.classList.remove('show'),3500);
+};
+
+function showToast(msg,type='info') { window.showToast(msg,type); }
+</script>
+</body>
+</html>

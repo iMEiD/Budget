@@ -443,6 +443,19 @@ import{getFirestore,doc,setDoc,getDoc,collection,addDoc,getDocs,deleteDoc,update
 
 const app=initializeApp({apiKey:"AIzaSyAyibBrcigwaLNGBkSjb50dSusWKodYRpI",authDomain:"budget-38a17.firebaseapp.com",projectId:"budget-38a17",storageBucket:"budget-38a17.firebasestorage.app",messagingSenderId:"487681024383",appId:"1:487681024383:web:d524d7b1485eb63ed7fa4a"});
 const auth=getAuth(app),db=getFirestore(app);
+// --- كود فحص الاتصال ---
+const checkFirebase = setTimeout(() => {
+  const loader = document.getElementById('loadingScreen');
+  if (loader && loader.style.display !== 'none') {
+    loader.style.display = 'none';
+    if(typeof user !== 'undefined' && user) {
+        document.getElementById('mainApp').style.display = 'block';
+    } else {
+        document.getElementById('authScreen').style.display = 'block';
+    }
+    alert("تنبيه الفحص: Firebase لم يستجب خلال 8 ثوانٍ. المشكلة غالباً في إعدادات Authorized Domains لـ pkgat.com");
+  }
+}, 8000);
 
 const TX={
 ar:{loading:'جاري التحميل...',authSub:'تتبع مصاريفك • حقق أهدافك',signIn:'تسجيل الدخول',register:'حساب جديد',email:'البريد الإلكتروني',pass:'كلمة المرور',name:'الاسم',signInBtn:'← دخول',registerBtn:'← إنشاء الحساب',note:'لا يتطلب تأكيد بريد.',wrongCreds:'بيانات غير صحيحة',emailUsed:'البريد مستخدم بالفعل',fillAll:'أكمل جميع الحقول',passShort:'كلمة المرور 6 أحرف على الأقل',signedOut:'تم تسجيل الخروج',balLbl:'المتبقي هذا الشهر',spentLbl:'صُرف هذا الشهر',savedLbl:'مدخرات هدفي',dailyTitle:'📊 الحد اليومي الذكي',addTitle:'➕ تسجيل مصروف',addBtn:'تسجيل المصروف',todayTitle:'🕐 مصاريف اليوم',noToday:'لا توجد مصاريف اليوم',commitTitle:'الالتزامات',commitSec:'📋 الالتزامات الشهرية',noCommits:'لا توجد التزامات',commitName:'اسم الالتزام',goalTitle:'هدفي',analysisTitle:'التحليل',settingsSub:'الإعدادات',langLbl:'اللغة',themeLbl:'المظهر',dark:'داكن',light:'فاتح',salaryLbl:'الراتب الشهري',paydayLbl:'يوم الراتب',dailyLbl:'الحد اليومي',currLbl:'العملة',destLbl:'اسم الهدف',goalLbl:'المبلغ المستهدف',monthsLbl:'أشهر التوفير',savedNowLbl:'موفّر حالياً',clearBtn:'🗑 مسح بيانات هذا الشهر',nav1:'الرئيسية',nav2:'الالتزامات',nav3:'هدفي',nav4:'التحليل',nav5:'الإعدادات',safe:'✅ أنت بأمان',overSafe:'⚡ تجاوزت الحد لكن رصيدك السابق يغطيك',over:'🚨 تجاوزت الحد! يؤثر على هدف الادخار',recorded:'✅ تم التسجيل',enterAmt:'أدخل مبلغ المصروف',commitAdded:'✅ تمت الإضافة',enterCommit:'أدخل اسم الالتزام والمبلغ',savedAdded:'🎉 تمت الإضافة للمدخرات!',enterSavings:'أدخل مبلغاً صحيحاً',settSaved:'✅ تم الحفظ',goalReached:'🎉',monthsWord:'شهر',toGoal:'للوصول',totalTarget:'الهدف الكلي',pctDone:'من الهدف',addSavBtn:'+ أضف توفير هذا الشهر','💡 خطة التوفير المقترحة',monthlyNeeded:'التوفير الشهري المطلوب',remaining:'المتبقي للهدف',pctSalary:'نسبة من الراتب',sugDaily:'حد يومي مقترح',applyPlan:'✅ تطبيق هذه الخطة',planApplied:'✅ تم تطبيق الخطة!',tipsTitle:'💡 نصائح الادخار الذكية',tip1t:'قاعدة 50/30/20',tip1b:'50% للضروريات، 30% للترفيه، 20% للادخار. من أكثر الاستراتيجيات فعالية لبناء الثروة.',tip2t:'صندوق الطوارئ أولاً',tip2b:'وفّر ما يعادل 3-6 أشهر من مصاريفك قبل أي هدف آخر. هذا يحميك من المفاجآت.',tip3t:'ادفع لنفسك أولاً',tip3b:'خصص مبلغ التوفير فور نزول الراتب قبل أي مصروف. لا تنتظر آخر الشهر.',tip4t:'التأثير المركب للادخار',tip4b:'تقليل 50 ريال يومياً = 1,500/شهر = 18,000/سنة. الفرق الصغير يصنع فرقاً كبيراً على المدى البعيد.',byDate:'بالتاريخ',totalSpentLbl:'إجمالي الصرف',dailyAvgLbl:'متوسط اليوم',netSav:'صافي للادخار',txCount:'عدد المعاملات',byCat:'📂 حسب التصنيف',recentTx:'📅 آخر المصاريف',noData:'لا بيانات',confirmClear:'هل أنت متأكد من مسح بيانات هذا الشهر؟',cleared:'🗑 تم المسح',signout:'خروج',savingsModalTitle:'🏦 إضافة توفير',savingsLbl:'المبلغ',savingsBtn:'✅ أضف للمدخرات',overAlert:'🚨 تجاوزت الحد اليومي بـ {x}! هذا سيؤخر وصولك للهدف.',amtPH:'المبلغ',descPH:'الوصف',dateLbl:'📅 التاريخ:',cats:{food:'أكل',transport:'تنقل',shopping:'تسوق',health:'صحة',cafe:'كافيه',fun:'ترفيه',bills:'فواتير',other:'أخرى'}},

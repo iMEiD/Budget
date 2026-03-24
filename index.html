@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="dark" data-lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Aimvest</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+[data-theme="dark"]{--bg:#0d1117;--bg2:#161b22;--card:#1c2230;--card2:#222b3a;--border:#2d3748;--text:#e8edf5;--text2:#a0aec0;--text3:#64748b;}
+[data-theme="light"]{--bg:#f0f4f8;--bg2:#e8edf5;--card:#ffffff;--card2:#f8fafc;--border:#e2e8f0;--text:#1a202c;--text2:#4a5568;--text3:#a0aec0;}
+:root{--teal:#00d4c4;--teal2:#00b4a6;--gold:#f5a623;--gold2:#e6951a;--red:#fc5c65;--red2:#ff6b6b;--green:#26de81;--green2:#20bf6b;--shadow:0 4px 20px rgba(0,0,0,0.15);--shadow-lg:0 8px 40px rgba(0,0,0,0.25);}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Tajawal','Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:430px;margin:0 auto;padding-bottom:90px;transition:background 0.3s,color 0.3s;}
+[data-lang="en"]{direction:ltr;}
+[data-lang="ar"]{direction:rtl;}
+
+/* LOADING */
+.loading-screen{position:fixed;inset:0;z-index:999;background:linear-gradient(160deg,#0d1117,#0f1e3c);display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.loading-logo-wrap{position:relative;margin-bottom:16px;}
+.loading-logo{font-size:52px;}
+.loading-ring{position:absolute;inset:-10px;border:3px solid transparent;border-top-color:var(--teal);border-radius:50%;animation:spin 1s linear infinite;}
+.loading-brand{font-size:26px;font-weight:900;color:#fff;letter-spacing:3px;}
+.loading-brand span{color:var(--teal);}
+.loading-sub{color:#64748b;font-size:13px;margin-top:8px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* AUTH */
+.auth-screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 22px;background:linear-gradient(160deg,#0d1117 0%,#0f1e3c 100%);position:relative;overflow:hidden;}
+.auth-brand{text-align:center;margin-bottom:28px;position:relative;z-index:1;}
+.auth-brand-icon{font-size:44px;margin-bottom:8px;}
+.auth-brand-name{font-size:30px;font-weight:900;color:#fff;letter-spacing:3px;}
+.auth-brand-name span{color:var(--teal);}
+.auth-brand-sub{color:rgba(255,255,255,0.4);font-size:13px;margin-top:5px;}
+.auth-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:22px;padding:26px 22px;width:100%;position:relative;z-index:1;backdrop-filter:blur(20px);}
+.auth-tabs{display:flex;margin-bottom:22px;background:rgba(0,0,0,0.3);border-radius:12px;padding:4px;}
+.auth-tab{flex:1;padding:11px;border:none;background:none;color:rgba(255,255,255,0.4);font-family:'Tajawal','Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;border-radius:9px;transition:all 0.25s;}
+.auth-tab.active{background:var(--teal2);color:#fff;}
+.auth-field{margin-bottom:14px;}
+.auth-label{font-size:12px;font-weight:700;color:rgba(255,255,255,0.45);display:block;margin-bottom:6px;}
+.auth-input{width:100%;padding:13px 16px;border:1.5px solid rgba(255,255,255,0.1);border-radius:12px;background:rgba(255,255,255,0.07);color:#fff !important;font-family:'Tajawal','Inter',sans-serif;font-size:15px;transition:all 0.2s;-webkit-text-fill-color:#fff !important;}
+.auth-input:focus{outline:none;border-color:var(--teal);}
+.auth-input::placeholder{color:rgba(255,255,255,0.25) !important;-webkit-text-fill-color:rgba(255,255,255,0.25) !important;}
+.auth-btn{width:100%;padding:15px;border:none;border-radius:13px;background:linear-gradient(135deg,var(--teal),var(--teal2));color:#fff;font-family:'Tajawal','Inter',sans-serif;font-size:16px;font-weight:800;cursor:pointer;margin-top:8px;transition:all 0.2s;}
+.auth-btn:active{transform:scale(0.97);}
+.auth-error{color:var(--red2);font-size:13px;text-align:center;margin-top:10px;min-height:18px;font-weight:600;}
+.auth-note{color:rgba(255,255,255,0.25);font-size:12px;text-align:center;margin-top:12px;line-height:1.6;}
+
+/* TOPBAR */
+.topbar{background:linear-gradient(160deg,#0f1e3c,#1a2f54);padding:18px 18px 30px;position:relative;overflow:hidden;}
+.topbar-row{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1;}
+.brand-name{font-size:19px;font-weight:900;color:#fff;letter-spacing:2px;}
+.brand-name span{color:var(--teal);}
+.topbar-actions{display:flex;gap:8px;}
+.icon-btn{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.8);border-radius:10px;padding:7px 12px;font-family:'Tajawal','Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;}
+.date-badge{color:rgba(255,255,255,0.5);font-size:12px;font-weight:600;margin-top:5px;position:relative;z-index:1;}
+.balance-section{margin-top:14px;position:relative;z-index:1;}
+.balance-label{color:rgba(255,255,255,0.5);font-size:12px;font-weight:600;margin-bottom:4px;}
+.balance-amount{color:#fff;font-size:34px;font-weight:900;line-height:1;}
+.balance-sub{color:rgba(255,255,255,0.4);font-size:12px;margin-top:4px;}
+.top-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;position:relative;z-index:1;}
+.top-stat{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:12px 14px;}
+.top-stat-label{color:rgba(255,255,255,0.5);font-size:11px;margin-bottom:3px;font-weight:600;}
+.top-stat-val{color:#fff;font-size:17px;font-weight:900;}
+.top-stat-val.red{color:var(--red2);}
+.top-stat-val.green{color:var(--green);}
+
+/* LIMIT */
+.limit-card{margin:-13px 14px 0;background:var(--card);border-radius:18px;padding:16px;box-shadow:var(--shadow-lg);position:relative;z-index:2;border:1px solid var(--border);}
+.limit-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;}
+.limit-title{font-size:13px;font-weight:700;color:var(--text2);}
+.limit-bar-wrap{background:var(--border);border-radius:5px;height:8px;overflow:hidden;margin-bottom:9px;}
+.limit-bar-fill{height:100%;border-radius:5px;transition:width 0.6s ease,background 0.3s;}
+.limit-status{font-size:12px;font-weight:700;padding:5px 11px;border-radius:8px;display:inline-block;}
+.status-safe{background:rgba(38,222,129,0.1);color:var(--green2);}
+.status-warn{background:rgba(245,166,35,0.1);color:var(--gold2);}
+.status-danger{background:rgba(252,92,101,0.1);color:var(--red);}
+
+/* LAYOUT */
+.section{padding:16px 14px 0;}
+.section-title{font-size:15px;font-weight:800;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:7px;}
+.card{background:var(--card);border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:var(--shadow);border:1px solid var(--border);}
+
+/* INPUTS */
+input,select{font-family:'Tajawal','Inter',sans-serif;font-size:15px;width:100%;padding:12px 13px;border:1.5px solid var(--border);border-radius:11px;background:var(--card2);color:var(--text);transition:border-color 0.2s;-webkit-appearance:none;}
+input:focus,select:focus{outline:none;border-color:var(--teal);}
+input::placeholder{color:var(--text3);}
+input[type="number"]{direction:ltr;text-align:right;}
+select option{background:var(--card);color:var(--text);}
+.add-form{display:flex;flex-direction:column;gap:11px;}
+.form-row{display:flex;gap:9px;}
+.date-row{display:flex;gap:8px;align-items:center;}
+.date-row label{font-size:12px;color:var(--text2);font-weight:700;white-space:nowrap;}
+.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;}
+.cat-btn{background:var(--card2);border:2px solid transparent;border-radius:11px;padding:9px 5px;cursor:pointer;text-align:center;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:3px;}
+.cat-btn .cat-icon{font-size:21px;}
+.cat-btn .cat-name{font-size:10px;font-weight:700;color:var(--text3);font-family:'Tajawal','Inter',sans-serif;}
+.cat-btn.selected{border-color:var(--teal);background:rgba(0,212,196,0.08);}
+.cat-btn.selected .cat-name{color:var(--teal);}
+.btn-primary{background:linear-gradient(135deg,var(--teal),var(--teal2));color:#fff;border:none;border-radius:13px;padding:14px;font-family:'Tajawal','Inter',sans-serif;font-size:16px;font-weight:800;cursor:pointer;width:100%;transition:all 0.2s;}
+.btn-primary:active{transform:scale(0.97);}
+
+/* TX */
+.tx-item{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--border);}
+.tx-item:last-child{border-bottom:none;padding-bottom:0;}
+.tx-item:first-child{padding-top:0;}
+.tx-icon{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
+.tx-info{flex:1;min-width:0;}
+.tx-desc{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text);}
+.tx-meta{font-size:11px;color:var(--text3);margin-top:2px;}
+.tx-amount{font-size:14px;font-weight:800;color:var(--red);flex-shrink:0;}
+.tx-delete{background:none;border:none;color:var(--text3);font-size:17px;cursor:pointer;padding:3px;flex-shrink:0;}
+.empty-state{text-align:center;padding:24px;color:var(--text3);font-size:14px;}
+
+/* COMMITS */
+.commit-item{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border);}
+.commit-item:last-child{border-bottom:none;}
+.commit-left{display:flex;align-items:center;gap:10px;}
+.commit-check{width:23px;height:23px;border-radius:7px;border:2px solid var(--border);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:all 0.2s;flex-shrink:0;}
+.commit-check.paid{background:var(--green);border-color:var(--green);color:#fff;}
+.btn-small{background:var(--teal2);color:#fff;border:none;border-radius:10px;padding:12px 15px;font-family:'Tajawal','Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;}
+
+/* GOAL */
+.goal-hero{background:linear-gradient(135deg,#0f1e3c,#1a3a5f);border-radius:20px;padding:20px;color:#fff;box-shadow:var(--shadow-lg);border:1px solid rgba(0,212,196,0.15);}
+.goal-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;}
+.dest-icon{font-size:26px;margin-bottom:5px;}
+.dest-name{font-size:17px;font-weight:900;}
+.dest-timeline{font-size:12px;color:rgba(255,255,255,0.45);margin-top:2px;}
+.goal-saved-num{font-size:24px;font-weight:900;color:var(--teal);}
+.goal-saved-label{font-size:11px;color:rgba(255,255,255,0.4);}
+.goal-bar-wrap{background:rgba(255,255,255,0.12);border-radius:5px;height:9px;overflow:hidden;margin-bottom:12px;}
+.goal-bar-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--green));border-radius:5px;transition:width 0.8s;}
+.goal-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.goal-stat{background:rgba(255,255,255,0.07);border-radius:10px;padding:10px;text-align:center;}
+.goal-stat-num{font-size:15px;font-weight:900;}
+.goal-stat-label{font-size:10px;color:rgba(255,255,255,0.4);margin-top:2px;}
+.btn-add-savings{background:rgba(0,212,196,0.12);border:1.5px solid rgba(0,212,196,0.3);color:var(--teal);border-radius:11px;padding:11px;font-family:'Tajawal','Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;width:100%;}
+
+/* PLAN */
+.plan-box{background:var(--card2);border:1.5px solid var(--teal);border-radius:14px;padding:16px;margin-top:12px;}
+.plan-title{font-size:14px;font-weight:800;color:var(--teal);margin-bottom:12px;}
+.plan-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.plan-row:last-of-type{border-bottom:none;}
+.plan-apply-btn{background:linear-gradient(135deg,var(--teal),var(--teal2));color:#fff;border:none;border-radius:10px;padding:12px;width:100%;font-family:'Tajawal','Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:12px;}
+
+/* TIPS */
+.tip-card{background:var(--card2);border-radius:13px;padding:14px;margin-bottom:10px;}
+[data-lang="ar"] .tip-card{border-right:4px solid var(--teal);}
+[data-lang="en"] .tip-card{border-left:4px solid var(--teal);}
+.tip-title{font-size:13px;font-weight:800;color:var(--teal);margin-bottom:5px;}
+.tip-body{font-size:13px;color:var(--text2);line-height:1.7;}
+
+/* ANALYSIS */
+.analysis-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.stat-box{background:var(--card2);border-radius:13px;padding:14px;text-align:center;border:1px solid var(--border);}
+.stat-box-num{font-size:19px;font-weight:900;}
+.stat-box-label{font-size:11px;color:var(--text3);margin-top:3px;font-weight:600;}
+.cat-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.cat-row-icon{font-size:17px;width:26px;text-align:center;}
+.cat-row-info{flex:1;}
+.cat-row-name{font-size:13px;font-weight:700;color:var(--text);}
+.cat-row-bar-wrap{background:var(--border);border-radius:4px;height:6px;overflow:hidden;margin-top:3px;}
+.cat-row-bar{height:100%;border-radius:4px;}
+.cat-row-amount{font-size:13px;font-weight:800;color:var(--text);}
+.insight-box{background:rgba(0,212,196,0.06);border:1px solid rgba(0,212,196,0.2);border-radius:12px;padding:14px;font-size:13px;color:var(--teal2);font-weight:600;line-height:1.7;}
+
+/* BUDGET BREAKDOWN */
+.budget-breakdown{background:var(--card);border-radius:16px;padding:16px;border:1px solid var(--border);box-shadow:var(--shadow);}
+.bb-title{font-size:14px;font-weight:800;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.bb-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);}
+.bb-row:last-child{border-bottom:none;padding-bottom:0;}
+.bb-row-left{display:flex;align-items:center;gap:10px;}
+.bb-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.bb-label{font-size:13px;font-weight:600;color:var(--text2);}
+.bb-sub{font-size:11px;color:var(--text3);margin-top:1px;}
+.bb-amount{font-size:15px;font-weight:900;}
+.bb-check{background:none;border:1.5px solid var(--border);border-radius:8px;padding:4px 10px;font-family:'Tajawal','Inter',sans-serif;font-size:11px;font-weight:700;cursor:pointer;color:var(--text3);transition:all 0.2s;white-space:nowrap;}
+.bb-check.done{background:rgba(38,222,129,0.1);border-color:var(--green);color:var(--green2);}
+.bb-free{background:rgba(245,166,35,0.08);border:1px solid rgba(245,166,35,0.2);border-radius:12px;padding:12px 14px;margin-top:10px;display:flex;justify-content:space-between;align-items:center;}
+.bb-free-label{font-size:12px;color:var(--gold2);font-weight:700;}
+.bb-free-amount{font-size:18px;font-weight:900;color:var(--gold);}
+.bb-stacked{background:var(--card2);border-radius:10px;height:10px;overflow:hidden;margin-top:10px;display:flex;}
+.bb-stack-seg{height:100%;transition:width 0.6s ease;}
+
+/* SETTINGS */
+.settings-header{background:linear-gradient(160deg,#0f1e3c,#1a2f54);padding:22px 18px 18px;color:#fff;}
+.settings-section{padding:14px 14px 0;}
+.settings-group{background:var(--card);border-radius:16px;border:1px solid var(--border);overflow:hidden;margin-bottom:13px;}
+.settings-item{display:flex;align-items:center;justify-content:space-between;padding:14px 15px;border-bottom:1px solid var(--border);}
+.settings-item:last-child{border-bottom:none;}
+.settings-icon{font-size:19px;width:34px;height:34px;background:var(--card2);border-radius:10px;display:flex;align-items:center;justify-content:center;}
+.settings-label{font-size:14px;font-weight:700;color:var(--text);}
+.settings-input{background:transparent;border:none;color:var(--teal);font-family:'Tajawal','Inter',sans-serif;font-size:14px;font-weight:800;text-align:left;width:110px;padding:3px 6px;}
+.settings-input:focus{outline:none;}
+[data-lang="ar"] .settings-input{text-align:right;}
+.toggle-wrap{display:flex;gap:5px;}
+.toggle-opt{padding:5px 11px;border-radius:8px;font-size:12px;font-weight:700;border:1.5px solid var(--border);cursor:pointer;color:var(--text3);background:none;font-family:'Tajawal','Inter',sans-serif;transition:all 0.2s;}
+.toggle-opt.active{border-color:var(--teal);color:var(--teal);background:rgba(0,212,196,0.08);}
+
+/* TOAST */
+.toast{position:fixed;top:14px;left:50%;transform:translateX(-50%) translateY(-100px);background:var(--card);color:var(--text);padding:13px 18px;border-radius:13px;font-size:14px;font-weight:700;z-index:999;transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1);box-shadow:var(--shadow-lg);max-width:340px;width:90%;text-align:center;border:1px solid var(--border);}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.toast.warn{border-color:var(--gold);}
+.toast.danger{border-color:var(--red);}
+.toast.success{border-color:var(--green);}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;display:flex;align-items:flex-end;backdrop-filter:blur(5px);}
+.modal{background:var(--card);border-radius:22px 22px 0 0;padding:22px 18px 42px;width:100%;max-height:88vh;overflow-y:auto;animation:slideUp 0.3s ease;border-top:1px solid var(--border);}
+.modal-handle{width:38px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 18px;}
+.modal-title{font-size:17px;font-weight:800;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;color:var(--text);}
+.modal-close{background:var(--card2);border:none;border-radius:50%;width:30px;height:30px;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text2);}
+.modal-field{margin-bottom:13px;}
+.modal-label{font-size:13px;font-weight:700;color:var(--text2);margin-bottom:6px;display:block;}
+.btn-modal-save{background:linear-gradient(135deg,var(--teal),var(--teal2));color:#fff;border:none;border-radius:13px;padding:14px;font-family:'Tajawal','Inter',sans-serif;font-size:16px;font-weight:800;cursor:pointer;width:100%;margin-top:7px;}
+
+/* NAV */
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--card);border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(5,1fr);padding:9px 0 16px;z-index:50;box-shadow:0 -4px 20px rgba(0,0,0,0.12);}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;background:none;border:none;padding:5px 3px;}
+.nav-icon{font-size:20px;}
+.nav-label{font-size:9px;font-weight:700;color:var(--text3);font-family:'Tajawal','Inter',sans-serif;}
+.nav-btn.active .nav-label{color:var(--teal);}
+
+.page{display:none;}
+.page.active{display:block;animation:fadeIn 0.3s ease;}
+.divider{height:1px;background:var(--border);margin:14px 0;}
+
+@keyframes slideUp{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<div class="loading-screen" id="loadingScreen">
+  <div class="loading-logo-wrap"><div class="loading-logo">💰</div><div class="loading-ring"></div></div>
+  <div class="loading-brand">AIM<span>VEST</span></div>
+  <div class="loading-sub" id="loadingSub">جاري التحميل...</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- AUTH -->
+<div id="authScreen" style="display:none">
+<div class="auth-screen">
+  <div class="auth-brand">
+    <div class="auth-brand-icon">💰</div>
+    <div class="auth-brand-name">AIM<span>VEST</span></div>
+    <div class="auth-brand-sub" id="authSub">تتبع مصاريفك • حقق أهدافك</div>
+  </div>
+  <div class="auth-card">
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" onclick="switchAuth('login')">تسجيل الدخول</button>
+      <button class="auth-tab" id="tab-register" onclick="switchAuth('register')">حساب جديد</button>
+    </div>
+    <div id="loginForm">
+      <div class="auth-field"><label class="auth-label" id="lbl_email">البريد الإلكتروني</label><input class="auth-input" type="email" id="login_email" placeholder="example@email.com" dir="ltr" autocomplete="email"></div>
+      <div class="auth-field"><label class="auth-label" id="lbl_pass">كلمة المرور</label><input class="auth-input" type="password" id="login_pass" placeholder="••••••••" dir="ltr" autocomplete="current-password"></div>
+      <button class="auth-btn" id="loginBtn" onclick="login()">← دخول</button>
+    </div>
+    <div id="registerForm" style="display:none">
+      <div class="auth-field"><label class="auth-label" id="lbl_name">الاسم</label><input class="auth-input" type="text" id="reg_name" placeholder="محمد" autocomplete="name"></div>
+      <div class="auth-field"><label class="auth-label" id="lbl_email2">البريد الإلكتروني</label><input class="auth-input" type="email" id="reg_email" placeholder="example@email.com" dir="ltr" autocomplete="email"></div>
+      <div class="auth-field"><label class="auth-label" id="lbl_pass2">كلمة المرور</label><input class="auth-input" type="password" id="reg_pass" placeholder="••••••••" dir="ltr" autocomplete="new-password"></div>
+      <button class="auth-btn" id="registerBtn" onclick="register()">← إنشاء الحساب</button>
+      <div class="auth-note" id="authNote">لا يتطلب تأكيد بريد. سجّل دخولك مباشرة بعد التسجيل.</div>
+    </div>
+    <div class="auth-error" id="authError"></div>
+  </div>
+</div>
+</div>
+
+<!-- MAIN -->
+<div id="mainApp" style="display:none">
+
+<!-- Savings Modal -->
+<div class="modal-overlay" id="savingsModal" style="display:none">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title"><span id="savingsModalTitle">🏦 إضافة توفير</span><button class="modal-close" onclick="document.getElementById('savingsModal').style.display='none'">✕</button></div>
+    <div class="modal-field"><label class="modal-label" id="savingsLbl">المبلغ</label><input type="number" id="savings_add" placeholder="1500" min="0"></div>
+    <button class="btn-modal-save" onclick="addSavings()" id="savingsBtn">✅ أضف للمدخرات</button>
+  </div>
+</div>
+
+<!-- PAGE HOME -->
+<div class="page active" id="page-home">
+  <div class="topbar">
+    <div class="topbar-row">
+      <div class="brand-name">AIM<span>VEST</span></div>
+      <div class="topbar-actions">
+        <button class="icon-btn" onclick="switchPage('settings',document.querySelectorAll('.nav-btn')[4])">⚙️</button>
+        <button class="icon-btn" onclick="signOut()" id="signoutBtn">خروج</button>
+      </div>
+    </div>
+    <div class="date-badge" id="todayDateBadge"></div>
+    <div class="balance-section">
+      <div class="balance-label" id="balanceLabel">المتبقي هذا الشهر</div>
+      <div class="balance-amount" id="remaining">—</div>
+      <div class="balance-sub" id="remainingSub"></div>
+    </div>
+    <div class="top-stats">
+      <div class="top-stat"><div class="top-stat-label" id="spentLabel">صُرف هذا الشهر</div><div class="top-stat-val red" id="totalSpent">0</div></div>
+      <div class="top-stat"><div class="top-stat-label" id="savedLabel">مدخرات الرحلة</div><div class="top-stat-val green" id="savedAmount">0</div></div>
+    </div>
+  </div>
+  <div class="limit-card">
+    <div class="limit-row"><div class="limit-title" id="dailyTitle">📊 الحد اليومي الذكي</div><div style="font-size:13px;font-weight:700;color:var(--text)"><span id="dailyUsed">0</span> / <span id="dailyLimitDisp">—</span></div></div>
+    <div class="limit-bar-wrap"><div class="limit-bar-fill" id="limitBar" style="width:0%;background:var(--green)"></div></div>
+    <div id="limitStatus" class="limit-status status-safe">✅ أنت بأمان</div>
+  </div>
+
+  <!-- BUDGET BREAKDOWN -->
+  <div class="section" style="padding-top:14px">
+    <div id="budgetBreakdown"></div>
+  </div>
+
+  <!-- SAVINGS REMINDER BANNER -->
+  <div id="savingsReminderBanner" style="display:none;margin:0 14px 4px">
+    <div style="background:linear-gradient(135deg,rgba(0,212,196,0.12),rgba(38,222,129,0.08));border:1.5px solid rgba(0,212,196,0.3);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px">
+      <div style="font-size:28px;flex-shrink:0">🏦</div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:800;color:var(--teal)" id="reminderTitle">تذكير: ادخر هذا الشهر</div>
+        <div style="font-size:15px;font-weight:900;color:var(--text);margin-top:2px" id="reminderAmount">—</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px" id="reminderSub">حوّله لحساب منفصل الآن</div>
+      </div>
+      <div>
+        <button onclick="markSavingsTransferred()" id="reminderCheckBtn" style="background:rgba(0,212,196,0.15);border:1.5px solid var(--teal);color:var(--teal);border-radius:10px;padding:8px 12px;font-family:'Tajawal','Inter',sans-serif;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap">✓ تم</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title" id="addExpTitle">➕ تسجيل مصروف</div>
+    <div class="card">
+      <div class="add-form">
+        <div class="form-row">
+          <input type="number" id="exp_amount" placeholder="المبلغ" style="flex:1;text-align:right" min="0">
+          <input type="text" id="exp_desc" placeholder="الوصف" style="flex:2">
+        </div>
+        <div class="date-row">
+          <label id="expDateLbl">📅 التاريخ:</label>
+          <input type="date" id="exp_date" style="flex:1">
+        </div>
+        <div class="cat-grid" id="catGrid"></div>
+        <button class="btn-primary" onclick="addExpense()" id="addExpBtn">تسجيل المصروف</button>
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title" id="todayTitle">🕐 مصاريف اليوم</div>
+    <div class="card"><div id="todayList"><div class="empty-state" id="noTodayExp">لا توجد مصاريف اليوم</div></div></div>
+  </div>
+</div>
+
+<!-- PAGE COMMIT -->
+<div class="page" id="page-commit">
+  <div class="topbar" style="padding-bottom:18px">
+    <div class="topbar-row"><div class="brand-name">AIM<span>VEST</span></div><span style="color:rgba(255,255,255,0.55);font-size:13px;font-weight:700" id="commitPageTitle">الالتزامات</span></div>
+  </div>
+  <div class="section" style="padding-top:16px">
+    <div class="section-title" id="commitSecTitle">📋 الالتزامات الشهرية</div>
+    <div class="card">
+      <div id="commitList"><div class="empty-state" id="noCommits">لا توجد التزامات</div></div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <input type="text" id="commit_name" placeholder="اسم الالتزام" style="flex:2">
+        <input type="number" id="commit_amount" placeholder="المبلغ" style="flex:1;text-align:right" min="0">
+        <button class="btn-small" onclick="addCommitment()">+</button>
+      </div>
+    </div>
+    <div class="card" id="commitSummary"></div>
+  </div>
+</div>
+
+<!-- PAGE SAVINGS -->
+<div class="page" id="page-savings">
+  <div class="topbar" style="padding-bottom:18px">
+    <div class="topbar-row"><div class="brand-name">AIM<span>VEST</span></div><span style="color:rgba(255,255,255,0.55);font-size:13px;font-weight:700" id="goalPageTitle">هدفي</span></div>
+  </div>
+  <div class="section" style="padding-top:16px">
+    <div id="goalCard"></div>
+    <div id="tipsSection"></div>
+  </div>
+</div>
+
+<!-- PAGE ANALYSIS -->
+<div class="page" id="page-analysis">
+  <div class="topbar" style="padding-bottom:18px">
+    <div class="topbar-row"><div class="brand-name">AIM<span>VEST</span></div><span style="color:rgba(255,255,255,0.55);font-size:13px;font-weight:700" id="analysisPageTitle">التحليل</span></div>
+  </div>
+  <div class="section" style="padding-top:16px"><div id="analysisContent"></div></div>
+</div>
+
+<!-- PAGE SETTINGS -->
+<div class="page" id="page-settings">
+  <div class="settings-header">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div><div class="brand-name">AIM<span>VEST</span></div><div style="color:rgba(255,255,255,0.45);font-size:12px;margin-top:2px" id="settingsSub">الإعدادات</div></div>
+      <button class="icon-btn" onclick="signOut()" id="signoutBtn2">خروج</button>
+    </div>
+  </div>
+  <div class="settings-section" style="padding-top:16px">
+    <div class="settings-group">
+      <div class="settings-item">
+        <div style="display:flex;align-items:center;gap:10px"><div class="settings-icon">🌐</div><div class="settings-label" id="langLbl">اللغة</div></div>
+        <div class="toggle-wrap"><button class="toggle-opt active" id="langAr" onclick="setLang('ar')">عربي</button><button class="toggle-opt" id="langEn" onclick="setLang('en')">EN</button></div>
+      </div>
+      <div class="settings-item">
+        <div style="display:flex;align-items:center;gap:10px"><div class="settings-icon">🎨</div><div class="settings-label" id="themeLbl">المظهر</div></div>
+        <div class="toggle-wrap"><button class="toggle-opt active" id="themeDark" onclick="setTheme('dark')">داكن</button><button class="toggle-opt" id="themeLight" onclick="setTheme('light')">فاتح</button></div>
+      </div>
+    </div>
+    <div class="settings-group">
+      <div class="settings-item"><div style="display:flex;align-items:center;gap:10px"><div class="settings-icon">💰</div><div class="settings-label" id="salaryLbl">الراتب الشهري</div></div><input class="settings-input" type="number" id="cfg_salary" placeholder="5000" onchange="saveSetting('salary',this.value)"></div>
+      <div class="settings-item"><div style="display:flex;align-items:center;gap:10px"><div class="settings-icon">📅</div><div class="settings-label" id="paydayLbl">يوم الراتب</div></div><input class="settings-input" type="number" id="cfg_payday" placeholder="27" onchange="saveSetting('payday',this.value)"></div>
+      <div class="settings-item"><div style="display:flex;align-items:center;gap:10px"><div class="settings-icon">🎯</div><div class="settings-label" id="dailyLbl">الحد اليومي</div></div><input class="settings-input" type="number" id="cfg_daily" placeholder="100" onchange="saveSetting('daily',this.value)"></div>
+      <div class="settings-item"><div style="display:flex;align-items:center;gap:10px"><div class="settings-icon">💱</div><div class="settings-label" id="currLbl">العملة</div></div><input class="settings-input" type="text" id="cfg_currency" placeholder="ريال" style="width:80px" onchange="saveSetting('currency',this.value)"></div>
+    </div>
+    <div class="settings-group">
+      <div class="settings-item"><div style="display:flex;align-items:center;gap:10px"><div class="settings-icon">🎯</div><div class="settings-label" id="destLbl">اسم الهدف</div></div><input class="settings-input" type="text" id="cfg_dest" placeholder="رحلة / سيارة / شقة..." style="direction:rtl" onchange="saveSetting('dest',this.value)"></div>
+      <div class="settings-item"><div style="display:flex;align-items:center;gap:10px"><div class="settings-icon">💵</div><div class="settings-label" id="goalLbl">المبلغ المستهدف</div></div><input class="settings-input" type="number" id="cfg_goal" placeholder="15000" onchange="saveSetting('goal',this.value)"></div>
+      <div class="settings-item"><div style="display:flex;align-items:center;gap:10px"><div class="settings-icon">🗓️</div><div class="settings-label" id="monthsLbl">أشهر التوفير</div></div><input class="settings-input" type="number" id="cfg_months" placeholder="12" onchange="saveSetting('goalMonths',this.value)"></div>
+      <div class="settings-item"><div style="display:flex;align-items:center;gap:10px"><div class="settings-icon">🏦</div><div class="settings-label" id="savedLbl">موفّر حالياً</div></div><input class="settings-input" type="number" id="cfg_saved" placeholder="0" onchange="saveSetting('saved',this.value)"></div>
+    </div>
+    <div style="padding-bottom:16px">
+      <button style="background:rgba(252,92,101,0.08);border:1.5px solid var(--red);color:var(--red);border-radius:12px;padding:13px;width:100%;font-family:'Tajawal','Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px" onclick="clearMonthData()" id="clearBtn">🗑 مسح بيانات هذا الشهر</button>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="bottom-nav">
+  <button class="nav-btn active" onclick="switchPage('home',this)"><span class="nav-icon">🏠</span><span class="nav-label" id="nav1">الرئيسية</span></button>
+  <button class="nav-btn" onclick="switchPage('commit',this)"><span class="nav-icon">📋</span><span class="nav-label" id="nav2">الالتزامات</span></button>
+  <button class="nav-btn" onclick="switchPage('savings',this)"><span class="nav-icon">🎯</span><span class="nav-label" id="nav3">هدفي</span></button>
+  <button class="nav-btn" onclick="switchPage('analysis',this)"><span class="nav-icon">📊</span><span class="nav-label" id="nav4">التحليل</span></button>
+  <button class="nav-btn" onclick="switchPage('settings',this)"><span class="nav-icon">⚙️</span><span class="nav-label" id="nav5">الإعدادات</span></button>
+</div>
+</div>
+
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut as fbOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import{getFirestore,doc,setDoc,getDoc,collection,addDoc,getDocs,deleteDoc,updateDoc}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+// Fallback timeout
+setTimeout(()=>{
+  const ls=document.getElementById('loadingScreen');
+  if(ls&&ls.style.display!=='none'){
+    ls.style.display='none';
+    const as=document.getElementById('authScreen');
+    if(as)as.style.display='block';
+  }
+},8000);
+
+const app=initializeApp({apiKey:"AIzaSyAyibBrcigwaLNGBkSjb50dSusWKodYRpI",authDomain:"budget-38a17.firebaseapp.com",projectId:"budget-38a17",storageBucket:"budget-38a17.firebasestorage.app",messagingSenderId:"487681024383",appId:"1:487681024383:web:d524d7b1485eb63ed7fa4a"});
+const auth=getAuth(app),db=getFirestore(app);
+
+const TX={
+ar:{loading:'جاري التحميل...',authSub:'تتبع مصاريفك • حقق أهدافك',signIn:'تسجيل الدخول',register:'حساب جديد',email:'البريد الإلكتروني',pass:'كلمة المرور',name:'الاسم',signInBtn:'← دخول',registerBtn:'← إنشاء الحساب',note:'لا يتطلب تأكيد بريد.',wrongCreds:'بيانات غير صحيحة',emailUsed:'البريد مستخدم بالفعل',fillAll:'أكمل جميع الحقول',passShort:'كلمة المرور 6 أحرف على الأقل',signedOut:'تم تسجيل الخروج',balLbl:'المتبقي هذا الشهر',spentLbl:'صُرف هذا الشهر',savedLbl:'مدخرات هدفي',dailyTitle:'📊 الحد اليومي الذكي',addTitle:'➕ تسجيل مصروف',addBtn:'تسجيل المصروف',todayTitle:'🕐 مصاريف اليوم',noToday:'لا توجد مصاريف اليوم',commitTitle:'الالتزامات',commitSec:'📋 الالتزامات الشهرية',noCommits:'لا توجد التزامات',commitName:'اسم الالتزام',goalTitle:'هدفي',analysisTitle:'التحليل',settingsSub:'الإعدادات',langLbl:'اللغة',themeLbl:'المظهر',dark:'داكن',light:'فاتح',salaryLbl:'الراتب الشهري',paydayLbl:'يوم الراتب',dailyLbl:'الحد اليومي',currLbl:'العملة',destLbl:'اسم الهدف',goalLbl:'المبلغ المستهدف',monthsLbl:'أشهر التوفير',savedNowLbl:'موفّر حالياً',clearBtn:'🗑 مسح بيانات هذا الشهر',nav1:'الرئيسية',nav2:'الالتزامات',nav3:'هدفي',nav4:'التحليل',nav5:'الإعدادات',safe:'✅ أنت بأمان',overSafe:'⚡ تجاوزت الحد لكن رصيدك السابق يغطيك',over:'🚨 تجاوزت الحد! يؤثر على هدف الادخار',recorded:'✅ تم التسجيل',enterAmt:'أدخل مبلغ المصروف',commitAdded:'✅ تمت الإضافة',enterCommit:'أدخل اسم الالتزام والمبلغ',savedAdded:'🎉 تمت الإضافة للمدخرات!',enterSavings:'أدخل مبلغاً صحيحاً',settSaved:'✅ تم الحفظ',goalReached:'🎉',monthsWord:'شهر',toGoal:'للوصول',totalTarget:'الهدف الكلي',pctDone:'من الهدف',addSavBtn:'+ أضف توفير هذا الشهر','💡 خطة التوفير المقترحة',monthlyNeeded:'التوفير الشهري المطلوب',remaining:'المتبقي للهدف',pctSalary:'نسبة من الراتب',sugDaily:'حد يومي مقترح',applyPlan:'✅ تطبيق هذه الخطة',planApplied:'✅ تم تطبيق الخطة!',tipsTitle:'💡 نصائح الادخار الذكية',tip1t:'قاعدة 50/30/20',tip1b:'50% للضروريات، 30% للترفيه، 20% للادخار. من أكثر الاستراتيجيات فعالية لبناء الثروة.',tip2t:'صندوق الطوارئ أولاً',tip2b:'وفّر ما يعادل 3-6 أشهر من مصاريفك قبل أي هدف آخر. هذا يحميك من المفاجآت.',tip3t:'ادفع لنفسك أولاً',tip3b:'خصص مبلغ التوفير فور نزول الراتب قبل أي مصروف. لا تنتظر آخر الشهر.',tip4t:'التأثير المركب للادخار',tip4b:'تقليل 50 ريال يومياً = 1,500/شهر = 18,000/سنة. الفرق الصغير يصنع فرقاً كبيراً على المدى البعيد.',byDate:'بالتاريخ',totalSpentLbl:'إجمالي الصرف',dailyAvgLbl:'متوسط اليوم',netSav:'صافي للادخار',txCount:'عدد المعاملات',byCat:'📂 حسب التصنيف',recentTx:'📅 آخر المصاريف',noData:'لا بيانات',confirmClear:'هل أنت متأكد من مسح بيانات هذا الشهر؟',cleared:'🗑 تم المسح',signout:'خروج',savingsModalTitle:'🏦 إضافة توفير',savingsLbl:'المبلغ',savingsBtn:'✅ أضف للمدخرات',overAlert:'🚨 تجاوزت الحد اليومي بـ {x}! هذا سيؤخر وصولك للهدف.',amtPH:'المبلغ',descPH:'الوصف',dateLbl:'📅 التاريخ:',cats:{food:'أكل',transport:'تنقل',shopping:'تسوق',health:'صحة',cafe:'كافيه',fun:'ترفيه',bills:'فواتير',other:'أخرى'}},
+en:{loading:'Loading...',authSub:'Track spending • Achieve goals',signIn:'Sign In',register:'Register',email:'Email',pass:'Password',name:'Name',signInBtn:'Sign In →',registerBtn:'Create Account →',note:'No confirmation email needed.',wrongCreds:'Invalid credentials',emailUsed:'Email already in use',fillAll:'Fill all fields',passShort:'Password must be 6+ characters',signedOut:'Signed out',balLbl:'Remaining This Month',spentLbl:'Spent This Month',savedLbl:'My Goal Savings',dailyTitle:'📊 Smart Daily Limit',addTitle:'➕ Add Expense',addBtn:'Add Expense',todayTitle:"🕐 Today's Expenses",noToday:'No expenses today yet',commitTitle:'Commitments',commitSec:'📋 Monthly Commitments',noCommits:'No commitments yet',commitName:'Commitment name',goalTitle:'My Goal',analysisTitle:'Analysis',settingsSub:'Settings',langLbl:'Language',themeLbl:'Theme',dark:'Dark',light:'Light',salaryLbl:'Monthly Salary',paydayLbl:'Payday',dailyLbl:'Daily Limit',currLbl:'Currency',destLbl:'Goal Name',goalLbl:'Target Amount',monthsLbl:'Saving Months',savedNowLbl:'Currently Saved',clearBtn:"🗑 Clear This Month's Data",nav1:'Home',nav2:'Commitments',nav3:'Goal',nav4:'Analysis',nav5:'Settings',safe:"✅ You're on track",overSafe:'⚡ Over daily limit but previous balance covers it',over:'🚨 Over limit! Affects savings goal',recorded:'✅ Recorded',enterAmt:'Enter expense amount',commitAdded:'✅ Commitment added',enterCommit:'Enter name and amount',savedAdded:'🎉 Added to savings!',enterSavings:'Enter a valid amount',settSaved:'✅ Saved',goalReached:'🎉',monthsWord:'months',toGoal:'to goal',totalTarget:'Total Target',pctDone:'Complete',addSavBtn:"+ Add This Month's Savings",planTitle:'💡 Suggested Savings Plan',monthlyNeeded:'Monthly savings needed',remaining:'Remaining to goal',pctSalary:'% of Salary',sugDaily:'Suggested daily limit',applyPlan:'✅ Apply This Plan',planApplied:'✅ Plan applied!',tipsTitle:'💡 Smart Savings Tips',tip1t:'50/30/20 Rule',tip1b:'50% needs, 30% wants, 20% savings. Proven strategy for building wealth gradually.',tip2t:'Emergency Fund First',tip2b:'Save 3-6 months of expenses as emergency reserve before any other goal.',tip3t:'Pay Yourself First',tip3b:'Allocate savings immediately when salary arrives, before any expense.',tip4t:'Compound Effect of Saving',tip4b:'Cutting 50 SAR/day = 1,500/month = 18,000/year. Small differences make big impact.',byDate:'By Date',totalSpentLbl:'Total Spent',dailyAvgLbl:'Daily Average',netSav:'Net Savable',txCount:'Transactions',byCat:'📂 By Category',recentTx:'📅 Recent Expenses',noData:'No data',confirmClear:"Clear this month's data?",cleared:'🗑 Cleared',signout:'Sign Out',savingsModalTitle:'🏦 Add Savings',savingsLbl:'Amount',savingsBtn:'✅ Add to Savings',overAlert:'🚨 Exceeded daily limit by {x}! This delays your goal.',amtPH:'Amount',descPH:'Description',dateLbl:'📅 Date:',cats:{food:'Food',transport:'Transport',shopping:'Shopping',health:'Health',cafe:'Café',fun:'Fun',bills:'Bills',other:'Other'}}
+};
+
+const CATS=[{id:'food',icon:'🍔',color:'#ff7043'},{id:'transport',icon:'🚗',color:'#2196f3'},{id:'shopping',icon:'🛍',color:'#9c27b0'},{id:'health',icon:'💊',color:'#e53935'},{id:'cafe',icon:'☕',color:'#795548'},{id:'fun',icon:'🎮',color:'#ff9800'},{id:'bills',icon:'⚡',color:'#607d8b'},{id:'other',icon:'💸',color:'#78909c'}];
+
+let user=null,lang=localStorage.getItem('av_lang')||'ar',theme=localStorage.getItem('av_theme')||'dark';
+let config={salary:0,payday:27,daily:100,dest:'',goal:15000,goalMonths:12,saved:0,currency:'ريال'};
+let expenses=[],commitments=[],selCat='food',pendingPlan=null;
+
+const t=()=>TX[lang];
+const today=()=>new Date().toISOString().slice(0,10);
+const mk=()=>new Date().toISOString().slice(0,7);
+const fmt=n=>Math.round(Math.abs(n)).toLocaleString('en-US');
+const cur=()=>config.currency||'ريال';
+const $=id=>document.getElementById(id);
+const set=(id,v)=>{const e=$(id);if(e)e.textContent=v;};
+
+function applyTheme(th){document.documentElement.setAttribute('data-theme',th);$('themeDark')?.classList.toggle('active',th==='dark');$('themeLight')?.classList.toggle('active',th==='light');}
+function applyLang(l){document.documentElement.setAttribute('data-lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');$('langAr')?.classList.toggle('active',l==='ar');$('langEn')?.classList.toggle('active',l==='en');}
+window.setTheme=th=>{theme=th;localStorage.setItem('av_theme',th);applyTheme(th);};
+window.setLang=l=>{lang=l;localStorage.setItem('av_lang',l);applyLang(l);updateText();if(user)updateHome();};
+
+applyTheme(theme);applyLang(lang);
+
+function updateText(){
+  const tx=t();
+  set('loadingSub',tx.loading);set('authSub',tx.authSub);
+  set('tab-login',tx.signIn);set('tab-register',tx.register);
+  set('lbl_email',tx.email);set('lbl_pass',tx.pass);set('lbl_name',tx.name);set('lbl_email2',tx.email);set('lbl_pass2',tx.pass);
+  set('loginBtn',tx.signInBtn);set('registerBtn',tx.registerBtn);set('authNote',tx.note);
+  set('signoutBtn',tx.signout);set('signoutBtn2',tx.signout);
+  set('balanceLabel',tx.balLbl);set('spentLabel',tx.spentLbl);set('savedLabel',tx.savedLbl);
+  set('dailyTitle',tx.dailyTitle);set('addExpTitle',tx.addTitle);set('addExpBtn',tx.addBtn);
+  set('todayTitle',tx.todayTitle);set('noTodayExp',tx.noToday);set('expDateLbl',tx.dateLbl);
+  set('commitPageTitle',tx.commitTitle);set('commitSecTitle',tx.commitSec);set('noCommits',tx.noCommits);
+  set('goalPageTitle',tx.goalTitle);set('analysisPageTitle',tx.analysisTitle);
+  set('settingsSub',tx.settingsSub);set('langLbl',tx.langLbl);set('themeLbl',tx.themeLbl);
+  set('themeDark',tx.dark);set('themeLight',tx.light);
+  set('salaryLbl',tx.salaryLbl);set('paydayLbl',tx.paydayLbl);set('dailyLbl',tx.dailyLbl);set('currLbl',tx.currLbl);
+  set('destLbl',tx.destLbl);set('goalLbl',tx.goalLbl);set('monthsLbl',tx.monthsLbl);set('savedLbl',tx.savedNowLbl);
+  set('clearBtn',tx.clearBtn);
+  set('nav1',tx.nav1);set('nav2',tx.nav2);set('nav3',tx.nav3);set('nav4',tx.nav4);set('nav5',tx.nav5);
+  set('savingsModalTitle',tx.savingsModalTitle);set('savingsLbl',tx.savingsLbl);set('savingsBtn',tx.savingsBtn);
+  if($('exp_amount'))$('exp_amount').placeholder=tx.amtPH;
+  if($('exp_desc'))$('exp_desc').placeholder=tx.descPH;
+  if($('commit_name'))$('commit_name').placeholder=tx.commitName;
+  updateDate();initCatGrid();
+}
+
+function updateDate(){
+  const el=$('todayDateBadge');if(!el)return;
+  el.textContent=new Date().toLocaleDateString(lang==='ar'?'ar-SA':'en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+}
+
+onAuthStateChanged(auth,async u=>{
+  $('loadingScreen').style.display='none';
+  if(u){
+    user=u;$('authScreen').style.display='none';$('mainApp').style.display='block';
+    await loadData();
+    initCatGrid();
+    $('exp_date').value=today();
+    loadSettingsUI();updateHome();updateText();
+    // Reset savings transferred flag if new month
+    const lastMonth=config.lastMonth||'';
+    const curMonth=new Date().toISOString().slice(0,7);
+    if(lastMonth!==curMonth){config.lastMonth=curMonth;config.savingsTransferred=false;await saveConfig();}
+    // Payday reminder
+    const todayDay=new Date().getDate(),payday=config.payday||27;
+    if(todayDay===payday&&(config.monthlyS||0)>0&&!config.savingsTransferred){
+      setTimeout(()=>toast(lang==='ar'?`🎉 يوم الراتب! لا تنسى تحوّل ${fmt(config.monthlyS)} ${cur()} للادخار 🏦`:`🎉 Payday! Transfer ${fmt(config.monthlyS)} ${cur()} to savings 🏦`,'success'),1500);
+    }
+    if(!config.salary)setTimeout(()=>switchPage('settings',document.querySelectorAll('.nav-btn')[4]),600);
+  }else{
+    user=null;$('authScreen').style.display='block';$('mainApp').style.display='none';
+    updateText();
+  }
+});
+
+window.switchAuth=mode=>{
+  $('loginForm').style.display=mode==='login'?'block':'none';
+  $('registerForm').style.display=mode==='register'?'block':'none';
+  document.querySelectorAll('.auth-tab').forEach((tb,i)=>tb.classList.toggle('active',(mode==='login'&&i===0)||(mode==='register'&&i===1)));
+  $('authError').textContent='';
+};
+
+window.login=async()=>{
+  const email=$('login_email').value.trim(),pass=$('login_pass').value;
+  if(!email||!pass){$('authError').textContent=t().fillAll;return;}
+  try{await signInWithEmailAndPassword(auth,email,pass);}
+  catch{$('authError').textContent=t().wrongCreds;}
+};
+
+window.register=async()=>{
+  const name=$('reg_name').value.trim(),email=$('reg_email').value.trim(),pass=$('reg_pass').value;
+  if(!name||!email||!pass){$('authError').textContent=t().fillAll;return;}
+  if(pass.length<6){$('authError').textContent=t().passShort;return;}
+  try{
+    const c=await createUserWithEmailAndPassword(auth,email,pass);
+    await setDoc(doc(db,'users',c.user.uid),{name,email,createdAt:new Date().toISOString()});
+  }catch(e){$('authError').textContent=e.code==='auth/email-already-in-use'?t().emailUsed:t().fillAll;}
+};
+
+window.signOut=async()=>{await fbOut(auth);toast(t().signedOut);};
+
+async function loadData(){
+  if(!user)return;const uid=user.uid;
+  const cd=await getDoc(doc(db,'users',uid,'config','main'));
+  if(cd.exists())config={...config,...cd.data()};
+  const es=await getDocs(collection(db,'users',uid,'expenses'));
+  expenses=es.docs.map(d=>({id:d.id,...d.data()}));
+  const cs=await getDocs(collection(db,'users',uid,'commitments'));
+  commitments=cs.docs.map(d=>({id:d.id,...d.data()}));
+}
+
+async function saveConfig(){if(!user)return;await setDoc(doc(db,'users',user.uid,'config','main'),config);}
+
+window.saveSetting=async(field,val)=>{
+  if(['salary','payday','daily','goal','goalMonths','saved'].includes(field))config[field]=parseFloat(val)||0;
+  else config[field]=val;
+  await saveConfig();toast(t().settSaved,'success');updateHome();
+};
+
+function loadSettingsUI(){
+  const s=(id,v)=>{const e=$(id);if(e)e.value=v||'';};
+  s('cfg_salary',config.salary||'');s('cfg_payday',config.payday||27);s('cfg_daily',config.daily||100);
+  s('cfg_currency',config.currency||'ريال');s('cfg_dest',config.dest||'');
+  s('cfg_goal',config.goal||'');s('cfg_months',config.goalMonths||12);s('cfg_saved',config.saved||0);
+}
+
+function initCatGrid(){
+  const g=$('catGrid');if(!g)return;
+  g.innerHTML=CATS.map(c=>`<div class="cat-btn ${c.id===selCat?'selected':''}" onclick="selCatFn('${c.id}')"><span class="cat-icon">${c.icon}</span><span class="cat-name">${t().cats[c.id]}</span></div>`).join('');
+}
+window.selCatFn=id=>{selCat=id;initCatGrid();};
+
+const todayExps=()=>expenses.filter(e=>e.date===today());
+const monthExps=()=>expenses.filter(e=>e.date&&e.date.startsWith(mk()));
+const todayTotal=()=>todayExps().reduce((s,e)=>s+e.amount,0);
+const monthTotal=()=>monthExps().reduce((s,e)=>s+e.amount,0);
+
+function smartStatus(){
+  const dl=config.daily||100,tt=todayTotal(),days=new Date().getDate();
+  const allocated=days*dl,mt=monthTotal();
+  const cumSurplus=allocated-mt,prevSurplus=cumSurplus+tt,effLimit=dl+Math.max(0,prevSurplus);
+  return{dl,tt,cumSurplus,prevSurplus,effLimit};
+}
+
+function updateHome(){
+  const mt=monthTotal(),ct=commitments.filter(c=>c.paid).reduce((s,c)=>s+c.amount,0);
+  const sal=config.salary||0,rem=sal-mt-ct,cr=cur();
+  set('remaining',fmt(rem)+' '+cr);
+  set('remainingSub',`${t().salaryLbl}: ${fmt(sal)} ${cr} | ${t().spentLbl}: ${fmt(mt+ct)} ${cr}`);
+  set('totalSpent',fmt(mt)+' '+cr);
+  set('savedAmount',fmt(config.saved||0)+' '+cr);
+  updateDate();updateLimit();renderToday();renderBudgetBreakdown();
+}
+
+function updateLimit(){
+  const{dl,tt,prevSurplus,effLimit}=smartStatus(),cr=cur();
+  const pct=Math.min(100,(tt/Math.max(effLimit,1))*100);
+  set('dailyUsed',fmt(tt)+' '+cr);set('dailyLimitDisp',fmt(dl)+' '+cr);
+  $('limitBar').style.width=pct+'%';
+  const s=$('limitStatus');
+  if(tt<=dl){s.className='limit-status status-safe';s.textContent=t().safe;$('limitBar').style.background='var(--green)';}
+  else if(tt<=effLimit&&prevSurplus>0){s.className='limit-status status-warn';s.textContent=t().overSafe;$('limitBar').style.background='var(--gold)';}
+  else{s.className='limit-status status-danger';s.textContent=t().over;$('limitBar').style.background='var(--red)';}
+}
+
+function renderToday(){
+  const txs=todayExps().sort((a,b)=>b.time>a.time?1:-1);
+  const el=$('todayList'),cr=cur();
+  if(!txs.length){el.innerHTML=`<div class="empty-state">${t().noToday}</div>`;return;}
+  el.innerHTML=txs.map(tx=>{const c=CATS.find(c=>c.id===tx.cat)||CATS[7];return`<div class="tx-item"><div class="tx-icon" style="background:${c.color}22">${c.icon}</div><div class="tx-info"><div class="tx-desc">${tx.desc||t().cats[tx.cat]}</div><div class="tx-meta">${t().cats[tx.cat]} • ${tx.time||''}</div></div><div class="tx-amount">-${fmt(tx.amount)} ${cr}</div><button class="tx-delete" onclick="delExp('${tx.id}')">🗑</button></div>`;}).join('');
+}
+
+window.addExpense=async()=>{
+  const amt=parseFloat($('exp_amount').value),desc=$('exp_desc').value.trim(),dt=$('exp_date').value||today();
+  if(!amt||amt<=0){toast(t().enterAmt,'warn');return;}
+  const exp={amount:amt,desc,cat:selCat,date:dt,time:new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:false})};
+  const ref=await addDoc(collection(db,'users',user.uid,'expenses'),exp);
+  expenses.push({id:ref.id,...exp});
+  $('exp_amount').value='';$('exp_desc').value='';$('exp_date').value=today();
+  const{tt,dl,effLimit,prevSurplus}=smartStatus();
+  if(dt===today()&&tt>effLimit){toast(t().overAlert.replace('{x}',fmt(tt-dl)+' '+cur()),'danger');}
+  else if(dt===today()&&tt>dl&&prevSurplus>0){toast(t().overSafe,'warn');}
+  else{toast(t().recorded+' '+fmt(amt)+' '+cur(),'success');}
+  updateHome();
+};
+
+window.delExp=async id=>{await deleteDoc(doc(db,'users',user.uid,'expenses',id));expenses=expenses.filter(e=>e.id!==id);updateHome();};
+
+window.addCommitment=async()=>{
+  const name=$('commit_name').value.trim(),amt=parseFloat($('commit_amount').value);
+  if(!name||!amt){toast(t().enterCommit,'warn');return;}
+  const c={name,amount:amt,paid:false};
+  const ref=await addDoc(collection(db,'users',user.uid,'commitments'),c);
+  commitments.push({id:ref.id,...c});
+  $('commit_name').value='';$('commit_amount').value='';
+  toast(t().commitAdded,'success');renderCommitments();updateHome();
+};
+
+window.toggleCommit=async id=>{
+  const c=commitments.find(c=>c.id===id);if(!c)return;
+  c.paid=!c.paid;await updateDoc(doc(db,'users',user.uid,'commitments',id),{paid:c.paid});
+  renderCommitments();updateHome();
+};
+
+window.delCommit=async id=>{
+  await deleteDoc(doc(db,'users',user.uid,'commitments',id));
+  commitments=commitments.filter(c=>c.id!==id);renderCommitments();updateHome();
+};
+
+function renderCommitments(){
+  const el=$('commitList'),cr=cur();
+  if(!commitments.length){el.innerHTML=`<div class="empty-state">${t().noCommits}</div>`;$('commitSummary').innerHTML='';return;}
+  el.innerHTML=commitments.map(c=>`<div class="commit-item"><div class="commit-left"><div class="commit-check ${c.paid?'paid':''}" onclick="toggleCommit('${c.id}')">${c.paid?'✓':''}</div><div style="font-size:14px;font-weight:600;color:var(--text);${c.paid?'text-decoration:line-through;opacity:0.5':''}">${c.name}</div></div><div style="display:flex;align-items:center;gap:8px"><div style="font-size:14px;font-weight:800;color:${c.paid?'var(--text3)':'var(--red)'}">${fmt(c.amount)} ${cr}</div><button style="background:none;border:none;color:var(--text3);font-size:16px;cursor:pointer" onclick="delCommit('${c.id}')">✕</button></div></div>`).join('');
+  const tot=commitments.reduce((s,c)=>s+c.amount,0),paid=commitments.filter(c=>c.paid).reduce((s,c)=>s+c.amount,0);
+  $('commitSummary').innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;text-align:center"><div><div style="font-size:11px;color:var(--text3);margin-bottom:3px">${lang==='ar'?'الإجمالي':'Total'}</div><div style="font-size:17px;font-weight:900">${fmt(tot)}</div></div><div><div style="font-size:11px;color:var(--text3);margin-bottom:3px">${lang==='ar'?'مدفوع':'Paid'}</div><div style="font-size:17px;font-weight:900;color:var(--green)">${fmt(paid)}</div></div><div><div style="font-size:11px;color:var(--text3);margin-bottom:3px">${lang==='ar'?'متبقي':'Left'}</div><div style="font-size:17px;font-weight:900;color:var(--red)">${fmt(tot-paid)}</div></div></div>`;
+}
+
+window.addSavings=async()=>{
+  const amt=parseFloat($('savings_add').value);if(!amt||amt<=0){toast(t().enterSavings,'warn');return;}
+  config.saved=(config.saved||0)+amt;await saveConfig();
+  $('savingsModal').style.display='none';$('savings_add').value='';
+  toast(t().savedAdded,'success');renderGoal();updateHome();loadSettingsUI();
+};
+
+window.applyPlan=async()=>{
+  if(!pendingPlan)return;
+  config.daily=pendingPlan.sugDaily;config.goalMonths=pendingPlan.months;
+  await saveConfig();loadSettingsUI();toast(t().planApplied,'success');renderGoal();updateHome();
+};
+
+function renderGoal(){
+  const el=$('goalCard'),tipsEl=$('tipsSection');
+  const saved=config.saved||0,goal=config.goal||15000,dest=config.dest||(lang==='ar'?'هدفي':'My Goal');
+  const gm=config.goalMonths||12,cr=cur(),pct=Math.min(100,Math.round((saved/goal)*100));
+  const rem=Math.max(0,goal-saved),sal=config.salary||0,ct=commitments.reduce((s,c)=>s+c.amount,0);
+  const free=sal-ct,mn=gm>0?Math.ceil(rem/gm):rem,pctSal=sal>0?Math.round((mn/sal)*100):0;
+  const sugD=sal>0?Math.floor((free*0.2)/30):0,ml=rem>0&&mn>0?Math.ceil(rem/mn):0;
+  pendingPlan={months:gm,monthlyNeeded:mn,sugDaily:sugD};
+
+  // Dynamic icon based on goal name
+  const goalIcons={'رحل':'✈️','سفر':'✈️','trip':'✈️','travel':'✈️','بالي':'🌴','طوكيو':'🗼','سيار':'🚗','car':'🚗','شق':'🏠','بيت':'🏠','house':'🏠','home':'🏠','تعليم':'📚','study':'📚','زواج':'💍','wedding':'💍','طوار':'🛡️','emerg':'🛡️'};
+  let icon='🎯';
+  const dl=dest.toLowerCase();
+  for(const[k,v]of Object.entries(goalIcons)){if(dl.includes(k)){icon=v;break;}}
+
+  el.innerHTML=`<div class="goal-hero">
+    <div class="goal-top">
+      <div><div class="dest-icon">${icon}</div><div class="dest-name">${dest}</div><div class="dest-timeline">${gm} ${lang==='ar'?'شهر خطة':'month plan'}</div></div>
+      <div style="text-align:${lang==='ar'?'left':'right'}"><div class="goal-saved-num">${fmt(saved)}</div><div class="goal-saved-label">${cr} ${lang==='ar'?'موفّر':'saved'}</div></div>
+    </div>
+    <div class="goal-bar-wrap"><div class="goal-bar-fill" style="width:${pct}%"></div></div>
+    <div class="goal-stats">
+      <div class="goal-stat"><div class="goal-stat-num">${pct}%</div><div class="goal-stat-label">${t().pctDone}</div></div>
+      <div class="goal-stat"><div class="goal-stat-num">${fmt(goal)}</div><div class="goal-stat-label">${t().totalTarget}</div></div>
+      <div class="goal-stat"><div class="goal-stat-num">${ml>0?ml:t().goalReached}</div><div class="goal-stat-label">${ml>0?t().toGoal:''}</div></div>
+    </div>
+    <button class="btn-add-savings" onclick="document.getElementById('savingsModal').style.display='flex'">${t().addSavBtn}</button>
+  </div>
+  <div class="plan-box">
+    <div class="plan-title">${t().planTitle}</div>
+    <div class="plan-row"><span style="color:var(--text2)">${t().monthlyNeeded}</span><span style="font-weight:800;color:var(--teal)">${fmt(mn)} ${cr}</span></div>
+    <div class="plan-row"><span style="color:var(--text2)">${t().pctSalary}</span><span style="font-weight:800;color:${pctSal>30?'var(--red)':'var(--green)'}">${pctSal}%</span></div>
+    <div class="plan-row"><span style="color:var(--text2)">${t().sugDaily}</span><span style="font-weight:800">${fmt(sugD)} ${cr}</span></div>
+    <div class="plan-row"><span style="color:var(--text2)">${t().remaining}</span><span style="font-weight:800">${fmt(rem)} ${cr}</span></div>
+    ${sal>0?`<button class="plan-apply-btn" onclick="applyPlan()">${t().applyPlan}</button>`:''}
+  </div>
+  <div class="card" style="margin-top:12px">
+    <div class="section-title" style="margin-bottom:12px">📅 ${lang==='ar'?'جدول التوفير':'Savings Schedule'}</div>
+    ${Array.from({length:Math.min(gm,18)},(_,i)=>{
+      const acc=Math.min(goal,saved+mn*(i+1)),p=Math.min(100,Math.round((acc/goal)*100));
+      const d=new Date();d.setMonth(d.getMonth()+i+1);
+      const ml=d.toLocaleDateString(lang==='ar'?'ar-SA':'en-US',{month:'short',year:'numeric'});
+      return`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)"><div style="background:rgba(0,212,196,0.1);color:var(--teal);font-weight:800;font-size:12px;padding:5px 9px;border-radius:8px;min-width:36px;text-align:center">${i+1}</div><div style="flex:1"><div style="font-size:12px;color:var(--text3);margin-bottom:3px">${ml}</div><div style="background:var(--border);border-radius:4px;height:5px;overflow:hidden"><div style="height:100%;width:${p}%;background:linear-gradient(90deg,var(--teal),var(--green));border-radius:4px"></div></div></div><div style="font-size:13px;font-weight:800;color:var(--green)">${fmt(acc)} ${cr}</div></div>`;
+    }).join('')}
+  </div>`;
+
+  tipsEl.innerHTML=`<div class="card" style="margin-top:2px"><div class="section-title">${t().tipsTitle}</div>
+    <div class="tip-card"><div class="tip-title">${t().tip1t}</div><div class="tip-body">${t().tip1b}</div></div>
+    <div class="tip-card"><div class="tip-title">${t().tip2t}</div><div class="tip-body">${t().tip2b}</div></div>
+    <div class="tip-card"><div class="tip-title">${t().tip3t}</div><div class="tip-body">${t().tip3b}</div></div>
+    <div class="tip-card"><div class="tip-title">${t().tip4t}</div><div class="tip-body">${t().tip4b}</div></div>
+  </div>`;
+}
+
+function renderAnalysis(){
+  const me=monthExps(),tot=me.reduce((s,e)=>s+e.amount,0),days=new Date().getDate();
+  const avg=days>0?tot/days:0,sal=config.salary||0,ct=commitments.reduce((s,c)=>s+c.amount,0);
+  const net=sal-tot-ct,cr=cur();
+  const byCat={};CATS.forEach(c=>byCat[c.id]=0);me.forEach(e=>{if(byCat[e.cat]!==undefined)byCat[e.cat]+=e.amount;});
+  const maxC=Math.max(...Object.values(byCat),1);
+  const catRows=CATS.filter(c=>byCat[c.id]>0).sort((a,b)=>byCat[b.id]-byCat[a.id]).map(c=>{
+    const p=Math.round((byCat[c.id]/maxC)*100);
+    return`<div class="cat-row"><div class="cat-row-icon">${c.icon}</div><div class="cat-row-info"><div class="cat-row-name">${t().cats[c.id]}</div><div class="cat-row-bar-wrap"><div class="cat-row-bar" style="width:${p}%;background:${c.color}"></div></div></div><div class="cat-row-amount">${fmt(byCat[c.id])} ${cr}</div></div>`;
+  }).join('');
+  const{cumSurplus}=smartStatus(),topC=CATS.find(c=>c.id===Object.entries(byCat).sort((a,b)=>b[1]-a[1])[0]?.[0]);
+  const insight=tot===0?(lang==='ar'?'لم تسجل أي مصاريف هذا الشهر.':'No expenses this month yet.'):cumSurplus>0?(lang==='ar'?`👍 رائع! وفّرت ${fmt(cumSurplus)} ${cr} مقارنة بحدك اليومي.${topC?` أكثر مصاريفك في "${t().cats[topC.id]}".`:''}`:`👍 Great! Saved ${fmt(cumSurplus)} ${cr} vs daily limit.`):(lang==='ar'?`⚠️ تجاوزت ميزانيتك بـ ${fmt(Math.abs(cumSurplus))} ${cr}.${topC?` راجع "${t().cats[topC.id]}".`:''}`:`⚠️ Over budget by ${fmt(Math.abs(cumSurplus))} ${cr}.`);
+
+  const byDate={};
+  [...expenses].sort((a,b)=>b.date>a.date?1:-1).slice(0,40).forEach(e=>{
+    if(!byDate[e.date])byDate[e.date]=[];byDate[e.date].push(e);
+  });
+
+  $('analysisContent').innerHTML=`
+    <div class="analysis-grid">
+      <div class="stat-box"><div class="stat-box-num" style="color:var(--red)">${fmt(tot)}</div><div class="stat-box-label">${t().totalSpentLbl} ${cr}</div></div>
+      <div class="stat-box"><div class="stat-box-num" style="color:var(--gold)">${fmt(avg)}</div><div class="stat-box-label">${t().dailyAvgLbl}</div></div>
+      <div class="stat-box"><div class="stat-box-num" style="color:var(--green)">${fmt(net)}</div><div class="stat-box-label">${t().netSav} ${cr}</div></div>
+      <div class="stat-box"><div class="stat-box-num">${me.length}</div><div class="stat-box-label">${t().txCount}</div></div>
+    </div>
+    <div class="card"><div class="section-title" style="margin-bottom:12px">${t().byCat}</div>${catRows||`<div class="empty-state">${t().noData}</div>`}</div>
+    <div class="insight-box">${insight}</div>
+    <div class="card" style="margin-top:12px">
+      <div class="section-title" style="margin-bottom:12px">${t().recentTx}</div>
+      ${Object.entries(byDate).map(([date,txs])=>`
+        <div style="font-size:11px;font-weight:800;color:var(--text3);padding:8px 0 4px">${fmtDate(date)}</div>
+        ${txs.map(tx=>{const c=CATS.find(c=>c.id===tx.cat)||CATS[7];return`<div class="tx-item"><div class="tx-icon" style="background:${c.color}22">${c.icon}</div><div class="tx-info"><div class="tx-desc">${tx.desc||t().cats[tx.cat]}</div><div class="tx-meta">${t().cats[tx.cat]} • ${tx.time||''}</div></div><div class="tx-amount">-${fmt(tx.amount)} ${cr}</div><button class="tx-delete" onclick="delExp('${tx.id}')">🗑</button></div>`;}).join('')}
+      `).join('')||`<div class="empty-state">${t().noData}</div>`}
+    </div>`;
+}
+
+function fmtDate(d){return new Date(d+'T00:00:00').toLocaleDateString(lang==='ar'?'ar-SA':'en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});}
+
+window.clearMonthData=async()=>{
+  if(!confirm(t().confirmClear))return;
+  const m=mk(),toDel=expenses.filter(e=>e.date&&e.date.startsWith(m));
+  for(const e of toDel)await deleteDoc(doc(db,'users',user.uid,'expenses',e.id));
+  expenses=expenses.filter(e=>!e.date||!e.date.startsWith(m));
+  toast(t().cleared);updateHome();
+};
+
+window.switchPage=(page,btn)=>{
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  $('page-'+page).classList.add('active');if(btn)btn.classList.add('active');
+  if(page==='commit')renderCommitments();
+  if(page==='savings')renderGoal();
+  if(page==='analysis')renderAnalysis();
+  if(page==='settings')loadSettingsUI();
+  window.scrollTo({top:0,behavior:'smooth'});
+};
+
+function toast(msg,type='info'){
+  const el=$('toast');el.textContent=msg;el.className='toast show'+(type!=='info'?' '+type:'');
+  clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),4000);
+}
+
+// ===== BUDGET BREAKDOWN =====
+function renderBudgetBreakdown(){
+  const sal=config.salary||0,cr=cur();
+  const commitTotal=commitments.reduce((s,c)=>s+c.amount,0);
+  const afterCommit=sal-commitTotal;
+  const monthlyBudget=(config.daily||100)*30;
+  const monthlySavings=config.monthlyS||0;
+  const savedTransferred=config.savingsTransferred||false;
+  const free=Math.max(0,afterCommit-monthlyBudget-monthlySavings);
+
+  // stacked bar pcts
+  const base=Math.max(sal,1);
+  const pCommit=Math.min(100,Math.round((commitTotal/base)*100));
+  const pSav=Math.min(100-pCommit,Math.round((monthlySavings/base)*100));
+  const pBudget=Math.min(100-pCommit-pSav,Math.round((monthlyBudget/base)*100));
+  const pFree=100-pCommit-pSav-pBudget;
+
+  const el=$('budgetBreakdown');
+  if(!el)return;
+  if(!sal){el.innerHTML='';return;}
+
+  el.innerHTML=`<div class="budget-breakdown">
+    <div class="bb-title">💼 ${lang==='ar'?'توزيع الراتب':'Salary Distribution'}</div>
+
+    <div class="bb-row">
+      <div class="bb-row-left"><div class="bb-dot" style="background:var(--red)"></div><div><div class="bb-label">${lang==='ar'?'الالتزامات':'Commitments'}</div><div class="bb-sub">${commitments.length} ${lang==='ar'?'التزام':'items'}</div></div></div>
+      <div class="bb-amount" style="color:var(--red)">-${fmt(commitTotal)} ${cr}</div>
+    </div>
+
+    <div class="bb-row">
+      <div class="bb-row-left"><div class="bb-dot" style="background:var(--teal)"></div><div><div class="bb-label">${lang==='ar'?'المتبقي بعد الالتزامات':'After Commitments'}</div></div></div>
+      <div class="bb-amount" style="color:var(--teal)">${fmt(afterCommit)} ${cr}</div>
+    </div>
+
+    <div class="bb-row">
+      <div class="bb-row-left"><div class="bb-dot" style="background:var(--green)"></div><div><div class="bb-label">${lang==='ar'?'ادخار شهري':'Monthly Savings'}</div><div class="bb-sub">${lang==='ar'?'يُحوَّل لحساب منفصل':'Transfer to savings account'}</div></div></div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <input type="number" value="${monthlySavings||''}" placeholder="${lang==='ar'?'0':'0'}" min="0"
+          style="width:80px;text-align:center;padding:6px 8px;font-size:13px;font-weight:800;border:1.5px solid var(--border);border-radius:9px;background:var(--card2);color:var(--text)"
+          onchange="updateMonthlySavings(this.value)">
+        <button class="bb-check ${savedTransferred?'done':''}" onclick="markSavingsTransferred()" id="savTransBtn">
+          ${savedTransferred?(lang==='ar'?'✓ تم':'✓ Done'):(lang==='ar'?'تم؟':'Done?')}
+        </button>
+      </div>
+    </div>
+
+    <div class="bb-row">
+      <div class="bb-row-left"><div class="bb-dot" style="background:var(--gold)"></div><div><div class="bb-label">${lang==='ar'?'ميزانية الصرف الشهري':'Monthly Spending Budget'}</div><div class="bb-sub">${fmt(config.daily||100)} ${cr} × 30 ${lang==='ar'?'يوم':'days'}</div></div></div>
+      <div class="bb-amount" style="color:var(--gold)">${fmt(monthlyBudget)} ${cr}</div>
+    </div>
+
+    <div class="bb-stacked">
+      <div class="bb-stack-seg" style="width:${pCommit}%;background:var(--red)"></div>
+      <div class="bb-stack-seg" style="width:${pSav}%;background:var(--green)"></div>
+      <div class="bb-stack-seg" style="width:${pBudget}%;background:var(--gold)"></div>
+      <div class="bb-stack-seg" style="width:${Math.max(0,pFree)}%;background:var(--teal)"></div>
+    </div>
+
+    <div class="bb-free">
+      <div>
+        <div class="bb-free-label">🆓 ${lang==='ar'?'مبلغ حر / طوارئ':'Free / Emergency'}</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px">${lang==='ar'?'ما تبقى بعد كل التزام وادخار وميزانية':'Remaining after all deductions'}</div>
+      </div>
+      <div class="bb-free-amount">${fmt(free)} ${cr}</div>
+    </div>
+  </div>`;
+
+  // Savings reminder banner
+  renderSavingsReminder(monthlySavings, savedTransferred, cr);
+}
+
+function renderSavingsReminder(monthlySavings, done, cr){
+  const banner=$('savingsReminderBanner');
+  if(!banner)return;
+  if(!monthlySavings||monthlySavings<=0){banner.style.display='none';return;}
+  banner.style.display='block';
+  const rt=$('reminderTitle'),ra=$('reminderAmount'),rs=$('reminderSub'),rb=$('reminderCheckBtn');
+  if(done){
+    if(rt)rt.textContent=lang==='ar'?'✅ تم تحويل الادخار هذا الشهر':'✅ Savings transferred this month';
+    if(ra)ra.textContent=fmt(monthlySavings)+' '+cr;
+    if(rs)rs.textContent=lang==='ar'?'أحسنت! استمر على هذا المنوال':'Great job! Keep it up';
+    if(rb){rb.textContent=lang==='ar'?'✓ تم':'✓ Done';rb.style.opacity='0.5';}
+  }else{
+    if(rt)rt.textContent=lang==='ar'?'⏰ تذكير: حوّل مبلغ الادخار':'⏰ Reminder: Transfer savings';
+    if(ra)ra.textContent=fmt(monthlySavings)+' '+cr;
+    if(rs)rs.textContent=lang==='ar'?'لم تُحوَّل بعد — فعل الآن':'Not transferred yet — do it now';
+    if(rb)rb.textContent=lang==='ar'?'✓ تم':'✓ Done';
+  }
+}
+
+window.updateMonthlySavings=async(val)=>{
+  config.monthlyS=parseFloat(val)||0;
+  config.savingsTransferred=false;
+  await saveConfig();
+  renderBudgetBreakdown();
+  toast(lang==='ar'?`💰 مبلغ الادخار: ${fmt(config.monthlyS)} ${cur()}`:`💰 Savings set: ${fmt(config.monthlyS)} ${cur()}`,'success');
+};
+
+window.markSavingsTransferred=async()=>{
+  config.savingsTransferred=!config.savingsTransferred;
+  await saveConfig();
+  renderBudgetBreakdown();
+  if(config.savingsTransferred){
+    toast(lang==='ar'?'🎉 رائع! تم تحويل الادخار لحساب منفصل':'🎉 Great! Savings transferred','success');
+  }
+};
+</script>
+</body>
+</html>

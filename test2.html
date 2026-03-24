@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deep Test</title>
+<style>
+body{font-family:sans-serif;padding:16px;background:#111;color:#fff;direction:rtl;}
+.box{background:#1c2230;border-radius:10px;padding:14px;margin-bottom:10px;font-size:13px;word-break:break-all;}
+.ok{color:#26de81;} .err{color:#fc5c65;} .warn{color:#f5a623;}
+pre{white-space:pre-wrap;font-size:11px;color:#fc5c65;}
+</style>
+</head>
+<body>
+<h3>🔬 تشخيص عميق</h3>
+<div id="log"></div>
+
+<script>
+const L=document.getElementById('log');
+const log=(msg,type='ok')=>{ const d=document.createElement('div');d.className='box';d.innerHTML=`<span class="${type}">${msg}</span>`;L.appendChild(d); };
+const err=(msg)=>log(msg,'err');
+const warn=(msg)=>log(msg,'warn');
+
+window.onerror=(msg,src,line,col,e)=>{
+  err(`❌ خطأ JS: ${msg}<br>السطر: ${line} | العمود: ${col}<br>المصدر: ${src}<br><pre>${e?.stack||''}</pre>`);
+  return false;
+};
+window.onunhandledrejection=e=>{
+  err(`❌ Promise رُفض: ${e.reason}<br><pre>${e.reason?.stack||''}</pre>`);
+};
+
+log('✅ الصفحة تحملت');
+log('المتصفح: '+navigator.userAgent.slice(0,80),'warn');
+</script>
+
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getAuth,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import{getFirestore,doc,setDoc,getDoc,collection,addDoc,getDocs,deleteDoc,updateDoc}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const L=document.getElementById('log');
+const log=(msg,type='ok')=>{const d=document.createElement('div');d.className='box';d.innerHTML=`<span class="${type}">${msg}</span>`;L.appendChild(d);};
+const err=(msg)=>log(msg,'err');
+
+try{
+  log('✅ Firebase imports تمت');
+
+  const app=initializeApp({
+    apiKey:"AIzaSyAyibBrcigwaLNGBkSjb50dSusWKodYRpI",
+    authDomain:"budget-38a17.firebaseapp.com",
+    projectId:"budget-38a17",
+    storageBucket:"budget-38a17.firebasestorage.app",
+    messagingSenderId:"487681024383",
+    appId:"1:487681024383:web:d524d7b1485eb63ed7fa4a"
+  });
+  log('✅ Firebase App تهيأ');
+
+  const auth=getAuth(app);
+  log('✅ Auth جاهز');
+
+  const db=getFirestore(app);
+  log('✅ Firestore جاهز');
+
+  // Test reading config
+  try{
+    log('⏳ اختبار قراءة Firestore...','warn');
+    // Try a simple read
+    const testRef=doc(db,'_test_','_ping_');
+    log('✅ Firestore reference تم');
+  }catch(e){
+    err('❌ Firestore error: '+e.message);
+  }
+
+  log('⏳ اختبار Auth State...','warn');
+  onAuthStateChanged(auth, user=>{
+    if(user){
+      log('✅ Auth State: مسجل كـ '+user.email);
+      // Now test full data load
+      testDataLoad(db, user.uid);
+    } else {
+      log('⚠️ Auth State: غير مسجل','warn');
+    }
+  }, e=>{
+    err('❌ Auth State Error: '+e.message);
+  });
+
+} catch(e){
+  err('❌ خطأ رئيسي: '+e.message+'<br><pre>'+e.stack+'</pre>');
+}
+
+async function testDataLoad(db, uid){
+  const L=document.getElementById('log');
+  const log=(msg,type='ok')=>{const d=document.createElement('div');d.className='box';d.innerHTML=`<span class="${type}">${msg}</span>`;L.appendChild(d);};
+  const err=(msg)=>log(msg,'err');
+
+  try{
+    log('⏳ تحميل config...','warn');
+    const cfgDoc=await getDoc(doc(db,'users',uid,'config','main'));
+    log('✅ Config: '+(cfgDoc.exists()?JSON.stringify(cfgDoc.data()).slice(0,100):'فارغ'));
+  }catch(e){ err('❌ Config error: '+e.message); }
+
+  try{
+    log('⏳ تحميل expenses...','warn');
+    const es=await getDocs(collection(db,'users',uid,'expenses'));
+    log('✅ Expenses: '+es.docs.length+' سجل');
+  }catch(e){ err('❌ Expenses error: '+e.message); }
+
+  try{
+    log('⏳ تحميل commitments...','warn');
+    const cs=await getDocs(collection(db,'users',uid,'commitments'));
+    log('✅ Commitments: '+cs.docs.length+' سجل');
+  }catch(e){ err('❌ Commitments error: '+e.message); }
+
+  log('🎉 اكتمل التشخيص - ابحث عن أي ❌ أعلاه');
+}
+</script>
+</body>
+</html>
